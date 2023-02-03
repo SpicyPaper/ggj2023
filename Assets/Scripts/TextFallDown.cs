@@ -7,9 +7,10 @@ public class TextFallDown : MonoBehaviour
 {
 
     [SerializeField] int fallDownStep;
-    // Start is called before the first frame update
 
     [SerializeField] int updateBetweenSteps;
+
+    [SerializeField] int FallDownLimit;
 
     private int updateBetweenStepsCounter;
 
@@ -24,17 +25,19 @@ public class TextFallDown : MonoBehaviour
     {
         if (updateBetweenStepsCounter == updateBetweenSteps)
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y - fallDownStep, transform.position.z);
+            // use local position to prevent issue when rescaling the window
+            transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y - fallDownStep, transform.localPosition.z);
             updateBetweenStepsCounter = 0;
+
+            if (transform.localPosition.y < FallDownLimit)
+            {
+                Destroy(gameObject);
+            }
+
         }
         else
         {
             updateBetweenStepsCounter++;
         }
-    }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        Destroy(gameObject);
     }
 }
