@@ -5,24 +5,29 @@ using TMPro;
 
 public class FallDownElementMovement : MonoBehaviour
 {
+    [SerializeField]
+    int fallDownStep;
 
-    [SerializeField] int fallDownStep;
+    [SerializeField]
+    float durationBetweenSteps;
 
-    [SerializeField] float durationBetweenSteps;
-
-    [SerializeField] int FallDownLimit;
+    [SerializeField]
+    int FallDownLimit;
 
     private float elapsedDuration;
 
     void Start()
     {
-
         elapsedDuration = 0f;
-
     }
 
     void Update()
     {
+        // get the current state of the GameHandler
+        if (GameHandler.instance.GetGameStatus() != GameStatus.InGame)
+        {
+            return;
+        }
 
         elapsedDuration += Time.deltaTime;
 
@@ -33,9 +38,12 @@ public class FallDownElementMovement : MonoBehaviour
 
         elapsedDuration -= durationBetweenSteps;
 
-
         // use local position to prevent issue when rescaling the window
-        transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y - fallDownStep, transform.localPosition.z);
+        transform.localPosition = new Vector3(
+            transform.localPosition.x,
+            transform.localPosition.y - fallDownStep,
+            transform.localPosition.z
+        );
         elapsedDuration = 0;
 
         if (transform.localPosition.y < FallDownLimit)

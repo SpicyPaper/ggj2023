@@ -18,38 +18,52 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     float durationBetweenSteps;
 
+    [SerializeField]
+    float minXPosition;
+
+    [SerializeField]
+    float maxXPosition;
+
     private PlayerDirection playerDirection;
 
     private float elapsedDuration;
+
+    private float previousAbsHorizontalInput;
 
     // Start is called before the first frame update
     void Start()
     {
         playerDirection = PlayerDirection.Left;
-        elapsedDuration = 0f;
+        elapsedDuration = durationBetweenSteps;
     }
 
     // Update is called once per frame
 
     void Update()
     {
-        elapsedDuration += Time.deltaTime;
-
-        if (elapsedDuration < durationBetweenSteps)
+        if (GameHandler.instance.GetGameStatus() != GameStatus.InGame)
         {
             return;
         }
 
-        elapsedDuration -= durationBetweenSteps;
+        elapsedDuration += Time.deltaTime;
 
-        // get Horizontal input
         float horizontalInput = Input.GetAxis("Horizontal");
 
         // if horizontal input is 0 then return
-        if (Mathf.Abs(horizontalInput) < 0.6f)
+        if (previousAbsHorizontalInput > 0.01f && Mathf.Abs(horizontalInput) < 0.8f)
+        {
+            previousAbsHorizontalInput = Mathf.Abs(horizontalInput);
+            return;
+        }
+
+        previousAbsHorizontalInput = Mathf.Abs(horizontalInput);
+        if (Mathf.Abs(horizontalInput) <= 0.01f || elapsedDuration < durationBetweenSteps)
         {
             return;
         }
+
+        elapsedDuration = 0;
 
         // move left or right
         PlayerDirection directionInCurrentFrame =
@@ -68,18 +82,32 @@ public class PlayerMovement : MonoBehaviour
 
         // move the player on local position
         transform.localPosition = new Vector2(
-            transform.localPosition.x + (Mathf.Sign(horizontalInput) * MovementStep),
+            Mathf.Clamp(
+                transform.localPosition.x + (Mathf.Sign(horizontalInput) * MovementStep),
+                minXPosition,
+                maxXPosition
+            ),
             transform.localPosition.y
         );
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        // if the player collides with an object tagged FallingText then destroy the player
-        if (collision.gameObject.tag == "FallingElement")
+        Debug.Log("OK");
+        GameObject collidedGameObject = collision.gameObject;
+
+        // if the collided object has no parent then return
+        if (collidedGameObject.transform.parent == null)
+        {
+            return;
+        }
+
+        GameObject collidedGameObjectParent = collidedGameObject.transform.parent.gameObject;
+
+        if (collidedGameObjectParent.tag == "FallingElement")
         {
             // Destroy the gameobject linked to the collision
-            Destroy(collision.gameObject);
+            Destroy(collidedGameObjectParent);
 
             // call the GameHandler to increase the ram usage
             GameHandler.instance.AddReduceRameUsage(1);
