@@ -115,8 +115,6 @@ public class PlayerMovement : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-
-        Debug.Log("OK");
         GameObject collidedGameObject = collision.gameObject;
 
         // if the collided object has no parent then return

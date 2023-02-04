@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using System;
-using Unity.Mathematics;
 
 public enum GameStatus
 {
@@ -38,11 +36,10 @@ public class GameHandler : MonoBehaviour
 
     private Level currentLevel = new Level1();
     private Stage currentStage;
-    private int maxStageIndex = 3; // Define the last stage that will be played
-    private int currentStageIndex = 1;
+    private int initStageIndex = 3; // Define the stage from which the player starts playing
 
-    private float neededDurationSpawnMin = 0.2f;
-    private float neededDurationSpawnMax = 1.2f;
+    private float neededDurationSpawnMin = 0.4f;
+    private float neededDurationSpawnMax = 2.2f;
     private float neededDurationSpawnCurrent= 1.2f;
     private float elapsedDurationSpawn;
 
@@ -105,7 +102,15 @@ public class GameHandler : MonoBehaviour
 
         terminalData.RamFullLife.text = new string(ramUsageCharacter, maxRamUsage);
 
+        // Init stage
         currentStage = currentLevel.CreateStage();
+        for (int i = 1; i < initStageIndex; i++)
+        {
+            currentStage.Reset();
+            currentStage = currentStage.Previous;
+        }
+        currentStage.Init();
+        terminalData.Path.text = currentStage.GetPath();
 
         SetGameStatus(GameStatus.InGame);
     }
@@ -165,10 +170,28 @@ public class GameHandler : MonoBehaviour
             return;
         }
         elapsedDurationSpawn = 0;
-        neededDurationSpawnCurrent = UnityEngine.Random.Range(neededDurationSpawnMin, neededDurationSpawnMax);
+        neededDurationSpawnCurrent = Random.Range(neededDurationSpawnMin, neededDurationSpawnMax);
+
+        // Select file
+        if (currentStage.CheckIfNextStageCanSpawn())
+        {
+            Debug.Log("You've reached the next stage");
+            currentStage = currentStage.Next;
+            if (currentStage == null)
+            {
+                terminalData.Path.text = "/";
+                Debug.Log("YOU WIN");
+            }
+            terminalData.Path.text = currentStage.GetPath();
+
+            // TODO: Remove next line when the animation to change stage is done
+            neededDurationSpawnCurrent = 10;
+            return;
+        }
+        File selectedFile = currentStage.CurrentFolder.SelectFile();
 
         // Select a spawner
-        int spawnerIndex = UnityEngine.Random.Range(0, spawner.transform.childCount - 1);
+        int spawnerIndex = Random.Range(0, spawner.transform.childCount);
         Transform selectedSpawner = spawner.transform.GetChild(spawnerIndex);
 
         // Spawn element on spawner
@@ -176,6 +199,7 @@ public class GameHandler : MonoBehaviour
         fallDownElement.transform.parent = spawnerParent.transform;
         fallDownElement.transform.localPosition = selectedSpawner.localPosition;
         fallDownElement.transform.localScale = Vector3.one;
+        fallDownElement.GetComponentInChildren<TMP_Text>().text = "." + selectedFile.FileType.ToString().ToUpper();
         fallDownElements.Add(fallDownElement);
     }
 
