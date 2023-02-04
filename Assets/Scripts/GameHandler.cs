@@ -17,15 +17,20 @@ public enum GameStatus
 public class GameHandler : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField] private int currentRamUsage;
+    [SerializeField]
+    private int currentRamUsage;
 
-    [SerializeField] private TerminalData terminalData;
+    [SerializeField]
+    private TerminalData terminalData;
 
-    [SerializeField] private GameObject spawnerParent;
+    [SerializeField]
+    private GameObject spawnerParent;
 
-    [SerializeField] private GameObject spawner;
+    [SerializeField]
+    private GameObject spawner;
 
-    [SerializeField] private GameObject fallDownElementModel;
+    [SerializeField]
+    private GameObject fallDownElementModel;
 
     private int maxRamUsage = 25;
 
@@ -36,6 +41,8 @@ public class GameHandler : MonoBehaviour
 
     private List<int> listCharacterPerStep;
 
+    private int currentRamUsageStep = 0;
+
     private Level currentLevel = new Level1();
     private Stage currentStage;
     private int maxStageIndex = 3; // Define the last stage that will be played
@@ -43,7 +50,7 @@ public class GameHandler : MonoBehaviour
 
     private float neededDurationSpawnMin = 0.2f;
     private float neededDurationSpawnMax = 1.2f;
-    private float neededDurationSpawnCurrent= 1.2f;
+    private float neededDurationSpawnCurrent = 1.2f;
     private float elapsedDurationSpawn;
 
     private List<GameObject> fallDownElements;
@@ -113,6 +120,7 @@ public class GameHandler : MonoBehaviour
     private void InGame()
     {
         UpdateRamUsageText();
+        ChangeFileRamWeightColor();
         UpdateSpawner();
 
         // if escape key is pressed, pause the game
@@ -165,7 +173,10 @@ public class GameHandler : MonoBehaviour
             return;
         }
         elapsedDurationSpawn = 0;
-        neededDurationSpawnCurrent = UnityEngine.Random.Range(neededDurationSpawnMin, neededDurationSpawnMax);
+        neededDurationSpawnCurrent = UnityEngine.Random.Range(
+            neededDurationSpawnMin,
+            neededDurationSpawnMax
+        );
 
         // Select a spawner
         int spawnerIndex = UnityEngine.Random.Range(0, spawner.transform.childCount - 1);
@@ -196,10 +207,39 @@ public class GameHandler : MonoBehaviour
                 listCharacterPerStep[i]
             );
 
+            if (ramUsageDisplayInStep > 0)
+            {
+                currentRamUsageStep = i;
+            }
+
             string ramUsageString = new string(ramUsageCharacter, ramUsageDisplayInStep);
             listRamUsageText[i].text = ramUsageString;
 
             ramUsageCounter += listCharacterPerStep[i];
+        }
+    }
+
+    private void ChangeFileRamWeightColor()
+    {
+        // get the color of the current ramUsageStep
+        Color32 color = listRamUsageText[currentRamUsageStep].color;
+
+        Debug.Log(color);
+
+        // loop through all the fallDownElements
+        for (int i = 0; i < fallDownElements.Count; i++)
+        {
+            // try to access the FallDownFileData component of the fallDownElement
+            // if it doesn't have the component, continue to the next element
+            FallDownFileData fallDownFileData = fallDownElements[
+                i
+            ].GetComponent<FallDownFileData>();
+            if (fallDownFileData == null)
+            {
+                continue;
+            }
+
+            fallDownFileData.fileRamWeight.color = color;
         }
     }
 }

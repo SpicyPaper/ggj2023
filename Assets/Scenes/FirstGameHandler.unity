@@ -958,6 +958,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1076591234 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8682670396210843641, guid: 07887e5b15d596e44bdeee6a4ef18db0, type: 3}
+  m_PrefabInstance: {fileID: 391755932}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1111110521 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7351070630693765056, guid: 07887e5b15d596e44bdeee6a4ef18db0, type: 3}
@@ -1171,6 +1176,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 307cff76df72ff343b6397928011d0a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &2085408316 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4077382565982467194, guid: 07887e5b15d596e44bdeee6a4ef18db0, type: 3}
+  m_PrefabInstance: {fileID: 391755932}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &9121596794349511574
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1179,6 +1189,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 4190011899377909570, guid: 6dd72630c41238c489ca108d63a11e90, type: 3}
+      propertyPath: spawner
+      value: 
+      objectReference: {fileID: 1076591234}
+    - target: {fileID: 4190011899377909570, guid: 6dd72630c41238c489ca108d63a11e90, type: 3}
       propertyPath: maxRamUsage
       value: 25
       objectReference: {fileID: 0}
@@ -1186,6 +1200,10 @@ PrefabInstance:
       propertyPath: terminalData
       value: 
       objectReference: {fileID: 1842598492}
+    - target: {fileID: 4190011899377909570, guid: 6dd72630c41238c489ca108d63a11e90, type: 3}
+      propertyPath: spawnerParent
+      value: 
+      objectReference: {fileID: 2085408316}
     - target: {fileID: 4190011899377909570, guid: 6dd72630c41238c489ca108d63a11e90, type: 3}
       propertyPath: ramUsagePrefab
       value: 
@@ -1198,6 +1216,10 @@ PrefabInstance:
       propertyPath: ramUsageGameObject
       value: 
       objectReference: {fileID: 256280910}
+    - target: {fileID: 4190011899377909570, guid: 6dd72630c41238c489ca108d63a11e90, type: 3}
+      propertyPath: fallDownElementModel
+      value: 
+      objectReference: {fileID: 6998188893838535180, guid: 17520cca06bfc6c4784789831f24d8b1, type: 3}
     - target: {fileID: 4190011899377909570, guid: 6dd72630c41238c489ca108d63a11e90, type: 3}
       propertyPath: listRamUsageText.Array.size
       value: 5
