@@ -15,15 +15,20 @@ public enum GameStatus
 public class GameHandler : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField] private int currentRamUsage;
+    [SerializeField]
+    private int currentRamUsage;
 
-    [SerializeField] private TerminalData terminalData;
+    [SerializeField]
+    private TerminalData terminalData;
 
-    [SerializeField] private GameObject spawnerParent;
+    [SerializeField]
+    private GameObject spawnerParent;
 
-    [SerializeField] private GameObject spawner;
+    [SerializeField]
+    private GameObject spawner;
 
-    [SerializeField] private GameObject fallDownElementModel;
+    [SerializeField]
+    private GameObject fallDownElementModel;
 
     private int maxRamUsage = 25;
 
@@ -33,6 +38,8 @@ public class GameHandler : MonoBehaviour
     private char ramUsageCharacter = '|';
 
     private List<int> listCharacterPerStep;
+
+    private int currentRamUsageStep = 0;
 
     private Level currentLevel = new Level1();
     private Stage currentStage;
@@ -118,6 +125,7 @@ public class GameHandler : MonoBehaviour
     private void InGame()
     {
         UpdateRamUsageText();
+        ChangeFileRamWeightColor();
         UpdateSpawner();
 
         // if escape key is pressed, pause the game
@@ -170,7 +178,10 @@ public class GameHandler : MonoBehaviour
             return;
         }
         elapsedDurationSpawn = 0;
-        neededDurationSpawnCurrent = Random.Range(neededDurationSpawnMin, neededDurationSpawnMax);
+        neededDurationSpawnCurrent = UnityEngine.Random.Range(
+            neededDurationSpawnMin,
+            neededDurationSpawnMax
+        );
 
         // Select file
         if (currentStage.CheckIfNextStageCanSpawn())
@@ -220,10 +231,39 @@ public class GameHandler : MonoBehaviour
                 listCharacterPerStep[i]
             );
 
+            if (ramUsageDisplayInStep > 0)
+            {
+                currentRamUsageStep = i;
+            }
+
             string ramUsageString = new string(ramUsageCharacter, ramUsageDisplayInStep);
             listRamUsageText[i].text = ramUsageString;
 
             ramUsageCounter += listCharacterPerStep[i];
+        }
+    }
+
+    private void ChangeFileRamWeightColor()
+    {
+        // get the color of the current ramUsageStep
+        Color32 color = listRamUsageText[currentRamUsageStep].color;
+
+        Debug.Log(color);
+
+        // loop through all the fallDownElements
+        for (int i = 0; i < fallDownElements.Count; i++)
+        {
+            // try to access the FallDownFileData component of the fallDownElement
+            // if it doesn't have the component, continue to the next element
+            FallDownFileData fallDownFileData = fallDownElements[
+                i
+            ].GetComponent<FallDownFileData>();
+            if (fallDownFileData == null)
+            {
+                continue;
+            }
+
+            fallDownFileData.fileRamWeight.color = color;
         }
     }
 }

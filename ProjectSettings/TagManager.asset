@@ -4,7 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - FallingElement
+  - Folder
+  - File
   layers:
   - Default
   - TransparentFX

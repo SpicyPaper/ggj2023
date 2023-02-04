@@ -28,8 +28,9 @@ public class PlayerMovement : MonoBehaviour
 
     private float elapsedDuration;
 
-
     private float previousAbsHorizontalInput;
+
+    private float previousXposition;
 
     public int dashMultiplier = 5;
     public float dashStretchRatioMax = 0.5f;
@@ -40,13 +41,15 @@ public class PlayerMovement : MonoBehaviour
     private bool canDash = true;
     private bool isDashing = false;
     private float currentDashTime = 0f;
-    private Vector2 dashStart, dashEnd;
+    private Vector2 dashStart,
+        dashEnd;
 
     // Start is called before the first frame update
     void Start()
     {
         playerDirection = PlayerDirection.Left;
         elapsedDuration = durationBetweenSteps;
+        previousXposition = transform.localPosition.x;
     }
 
     // Update is called once per frame
@@ -56,6 +59,14 @@ public class PlayerMovement : MonoBehaviour
         if (GameHandler.instance.GetGameStatus() != GameStatus.InGame)
             return;
 
+        float horizontalInput = Input.GetAxis("Horizontal");
+
+        if (Mathf.Abs(horizontalInput) > 0.01f)
+        {
+            playerDirection = horizontalInput > 0 ? PlayerDirection.Right : PlayerDirection.Left;
+        }
+
+        transform.localScale = new Vector3(playerDirection == PlayerDirection.Left ? 1 : -1, 1, 1);
 
         if (Input.GetKeyDown(KeyCode.Space) && canDash)
         {
@@ -69,8 +80,6 @@ public class PlayerMovement : MonoBehaviour
         }
 
         elapsedDuration += Time.deltaTime;
-
-        float horizontalInput = Input.GetAxis("Horizontal");
 
         // if horizontal input is 0 then return
         if (previousAbsHorizontalInput > 0.01f && Mathf.Abs(horizontalInput) < 0.8f)
@@ -86,21 +95,6 @@ public class PlayerMovement : MonoBehaviour
         }
 
         elapsedDuration = 0;
-
-        // move left or right
-        PlayerDirection directionInCurrentFrame =
-            horizontalInput < 0 ? PlayerDirection.Left : PlayerDirection.Right;
-
-        if (directionInCurrentFrame != playerDirection)
-        {
-            // multiply x scale by -1 to flip the sprite
-            transform.localScale = new Vector3(
-                transform.localScale.x * -1,
-                transform.localScale.y,
-                transform.localScale.z
-            );
-            playerDirection = directionInCurrentFrame;
-        }
 
         // move the player on local position
         transform.localPosition = new Vector2(
@@ -125,7 +119,7 @@ public class PlayerMovement : MonoBehaviour
 
         GameObject collidedGameObjectParent = collidedGameObject.transform.parent.gameObject;
 
-        if (collidedGameObjectParent.tag == "FallingElement" && !isDashing)
+        if (collidedGameObjectParent.tag == "File" && !isDashing)
         {
             // Destroy the gameobject linked to the collision
             Destroy(collidedGameObjectParent);
@@ -133,8 +127,15 @@ public class PlayerMovement : MonoBehaviour
             // call the GameHandler to increase the ram usage
             GameHandler.instance.AddReduceRameUsage(1);
         }
-    }
+        else if (collidedGameObjectParent.tag == "Folder" && !isDashing)
+        {
+            // Destroy the gameobject linked to the collision
+            Destroy(collidedGameObjectParent);
 
+            // call the GameHandler to increase the ram usage
+            GameHandler.instance.AddReduceRameUsage(10);
+        }
+    }
 
     private void StartDash()
     {
@@ -142,12 +143,21 @@ public class PlayerMovement : MonoBehaviour
         canDash = false;
         currentDashTime = 0;
         dashStart = transform.localPosition;
-        dashEnd = new Vector2(transform.localPosition.x + MovementStep * (playerDirection == PlayerDirection.Left ? -1 : 1) * dashMultiplier, transform.localPosition.y);
+        dashEnd = new Vector2(
+            Mathf.Clamp(
+                transform.localPosition.x
+                    + MovementStep
+                        * (playerDirection == PlayerDirection.Left ? -1 : 1)
+                        * dashMultiplier,
+                minXPosition,
+                maxXPosition
+            ),
+            transform.localPosition.y
+        );
     }
 
     private void Dash()
     {
-        
         // Is currently dashing
         if (isDashing)
         {
@@ -157,8 +167,10 @@ public class PlayerMovement : MonoBehaviour
             float scalingRatio = SmoothScaling(perc);
 
             transform.localPosition = Vector2.Lerp(dashStart, dashEnd, perc);
-            transform.localScale = new Vector2(1 / scalingRatio, scalingRatio);
-
+            transform.localScale = new Vector2(
+                Mathf.Sign(transform.localScale.x) * (1 / scalingRatio),
+                scalingRatio
+            );
 
             if (currentDashTime >= dashTime)
             {
@@ -169,7 +181,6 @@ public class PlayerMovement : MonoBehaviour
                 elapsedDuration = 0;
             }
         }
-
     }
 
     private void ResetDash()
