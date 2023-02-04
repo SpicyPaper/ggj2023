@@ -15,17 +15,13 @@ public enum GameStatus
 public class GameHandler : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField]
-    private int currentRamUsage;
+    [SerializeField] private int currentRamUsage;
 
-    [SerializeField]
-    private TerminalData terminalData;
+    [SerializeField] private TerminalData terminalData;
 
-    [SerializeField]
-    private GameObject spawnerParent;
+    [SerializeField] private GameObject spawnerParent;
 
-    [SerializeField]
-    private GameObject spawner;
+    [SerializeField] private GameObject spawner;
 
     [SerializeField]
     private GameObject fallDownFileModel;
@@ -33,7 +29,7 @@ public class GameHandler : MonoBehaviour
 
     public int filesCountMult = 5;
 
-    private int maxRamUsage = 25;
+    private int maxRamUsage;
 
     private List<TMP_Text> listRamUsageText;
     private int startRamUsage;
@@ -100,6 +96,7 @@ public class GameHandler : MonoBehaviour
     {
         startRamUsage = currentRamUsage;
         listRamUsageText = terminalData.RamStepsLife;
+        maxRamUsage = terminalData.RamFullLife.text.Length;
 
         // the list of character per step is based on the text size of each ramUsageText
         listCharacterPerStep = new List<int>();
