@@ -107,6 +107,11 @@ public class Level1 : Level
                 },
                 new()
                 {
+                    Name = "lisar",
+                    Files = files2
+                },
+                new()
+                {
                     Name = "farien",
                     Files = files2
                 },
@@ -133,7 +138,7 @@ public class Level1 : Level
             },
         };
 
-        List<File> file3images = new()
+        List<File> files3images = new()
         {
             new()
             {
@@ -147,16 +152,21 @@ public class Level1 : Level
             },
         };
 
-        List<File> file3musics = new()
+        List<File> files3musics = new()
         {
             new()
             {
                 FileType = File.Type.MP3,
-                Count = 20
+                Count = 10
+            },
+            new()
+            {
+                FileType = File.Type.ZIP,
+                Count = 10
             },
         };
 
-        List<File> file3documents = new()
+        List<File> files3documents = new()
         {
             new()
             {
@@ -185,6 +195,54 @@ public class Level1 : Level
             },
         };
 
+        List<File> files3videos= new()
+        {
+            new()
+            {
+                FileType = File.Type.AVI,
+                Count = 10
+            },
+            new()
+            {
+                FileType = File.Type.ZIP,
+                Count = 10
+            },
+        };
+
+        List<File> files3desktop = new()
+        {
+            new()
+            {
+                FileType = File.Type.PY,
+                Count = 5
+            },
+            new()
+            {
+                FileType = File.Type.HTML,
+                Count = 5
+            },
+            new()
+            {
+                FileType = File.Type.CSS,
+                Count = 2
+            },
+            new()
+            {
+                FileType = File.Type.C,
+                Count = 3
+            },
+            new()
+            {
+                FileType = File.Type.H,
+                Count = 3
+            },
+            new()
+            {
+                FileType = File.Type.TXT,
+                Count = 2
+            },
+        };
+
         Stage stage3 = new()
         {
             Next = stage2,
@@ -193,26 +251,67 @@ public class Level1 : Level
                 new()
                 {
                     Name = "images",
-                    Files = file3images
+                    Files = files3images
                 },
                 new()
                 {
                     Name = "musics",
-                    Files = file3musics
+                    Files = files3musics
                 },
                 new()
                 {
                     Name = "documents",
-                    Files = file3documents
+                    Files = files3documents
                 },
                 new()
                 {
                     Name = "videos",
+                    Files = files3videos
                 },
                 new()
                 {
                     Name = "desktop",
+                    Files = files3desktop
                 },
+            },
+        };
+
+        List<File> files4 = new()
+        {
+            new()
+            {
+                FileType = File.Type.PNG,
+                Count = 3
+            },
+            new()
+            {
+                FileType = File.Type.JPEG,
+                Count = 3
+            },
+            new()
+            {
+                FileType = File.Type.ZIP,
+                Count = 2
+            },
+            new()
+            {
+                FileType = File.Type.DOCX,
+                Count = 2
+            },
+            new()
+            {
+                FileType = File.Type.SH,
+                Count = 2
+            },
+            new()
+            {
+                FileType = File.Type.TXT,
+                Count = 5
+            },
+            new()
+            {
+                FileType = File.Type.PDF,
+                Count = 3
             },
         };
 
@@ -224,51 +323,102 @@ public class Level1 : Level
                 new()
                 {
                     Name = "golf",
+                    Files = files4
                 },
                 new()
                 {
                     Name = "summer",
+                    Files = files4
                 },
                 new()
                 {
                     Name = "winter",
+                    Files = files4
                 },
                 new()
                 {
                     Name = "football",
+                    Files = files4
                 },
                 new()
                 {
                     Name = "games",
+                    Files = files4
                 },
                 new()
                 {
                     Name = "food",
+                    Files = files4
                 },
                 new()
                 {
                     Name = "wtf",
+                    Files = files4
                 },
                 new()
                 {
                     Name = "lol",
+                    Files = files4
                 },
                 new()
                 {
                     Name = "memes",
+                    Files = files4
                 },
                 new()
                 {
                     Name = "homework",
+                    Files = files4
                 },
                 new()
                 {
                     Name = "privatedontopenplease",
+                    Files = files4
                 },
                 new()
                 {
                     Name = "waitbecarefulbeforeopenning",
+                    Files = files4
                 },
+            },
+        };
+
+        List<File> files5 = new()
+        {
+            new()
+            {
+                FileType = File.Type.C,
+                Count = 3
+            },
+            new()
+            {
+                FileType = File.Type.H,
+                Count = 3
+            },
+            new()
+            {
+                FileType = File.Type.TORRENT,
+                Count = 2
+            },
+            new()
+            {
+                FileType = File.Type.GITIGNORE,
+                Count = 2
+            },
+            new()
+            {
+                FileType = File.Type.AVI,
+                Count = 2
+            },
+            new()
+            {
+                FileType = File.Type.ZIP,
+                Count = 5
+            },
+            new()
+            {
+                FileType = File.Type.DOCX,
+                Count = 3
             },
         };
 
@@ -280,38 +430,47 @@ public class Level1 : Level
                 new()
                 {
                     Name = "1996",
+                    Files = files5
                 },
                 new()
                 {
                     Name = "1997",
+                    Files = files5
                 },
                 new()
                 {
                     Name = "2000",
+                    Files = files5
                 },
                 new()
                 {
                     Name = "2003",
+                    Files = files5
                 },
                 new()
                 {
                     Name = "2023",
+                    Files = files5
                 },
                 new()
                 {
                     Name = "2187",
+                    Files = files5
                 },
                 new()
                 {
                     Name = "2335",
+                    Files = files5
                 },
                 new()
                 {
                     Name = "-0",
+                    Files = files5
                 },
                 new()
                 {
                     Name = "-12",
+                    Files = files5
                 },
             },
         };
