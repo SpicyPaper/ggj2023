@@ -93,11 +93,20 @@ public class PlayerMovement : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        // if the player collides with an object tagged FallingText then destroy the player
-        if (collision.gameObject.tag == "FallingElement")
+        GameObject collidedGameObject = collision.gameObject;
+
+        // if the collided object has no parent then return
+        if (collidedGameObject.transform.parent == null)
+        {
+            return;
+        }
+
+        GameObject collidedGameObjectParent = collidedGameObject.transform.parent.gameObject;
+
+        if (collidedGameObjectParent.tag == "FallingElement")
         {
             // Destroy the gameobject linked to the collision
-            Destroy(collision.gameObject);
+            Destroy(collidedGameObjectParent);
 
             // call the GameHandler to increase the ram usage
             GameHandler.instance.AddReduceRameUsage(1);
