@@ -277,6 +277,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MovementStep: 40
   durationBetweenSteps: 0.2
+  minXPosition: -520
+  maxXPosition: 520
 --- !u!1001 &5575160898034697056
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -370,6 +372,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3136680428454158072, guid: 17520cca06bfc6c4784789831f24d8b1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5946856081794886961, guid: 17520cca06bfc6c4784789831f24d8b1, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5946856081794886961, guid: 17520cca06bfc6c4784789831f24d8b1, type: 3}
+      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6998188893838535180, guid: 17520cca06bfc6c4784789831f24d8b1, type: 3}
