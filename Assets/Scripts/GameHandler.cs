@@ -9,19 +9,17 @@ public class GameHandler : MonoBehaviour
     [SerializeField]
     private int currentRamUsage;
 
-    [SerializeField]
     private int maxRamUsage = 25;
 
     [SerializeField]
     private TerminalData terminalData;
 
     private List<TMP_Text> listRamUsageText;
-
     private int startRamUsage;
 
     private char ramUsageCharacter = '|';
 
-    private int ramUsageCharacterPerStep;
+    private List<int> listCharacterPerStep;
 
     // create a singleton to access this class from other classes
     public static GameHandler instance;
@@ -31,7 +29,6 @@ public class GameHandler : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            Debug.Log("GameHandler instance created");
         }
         else
         {
@@ -44,10 +41,13 @@ public class GameHandler : MonoBehaviour
         startRamUsage = currentRamUsage;
         listRamUsageText = terminalData.RamStepsLife;
 
-        // calculate the ramUsageCharacterPerStep
-        ramUsageCharacterPerStep = maxRamUsage / listRamUsageText.Count;
+        // the list of character per step is based on the text size of each ramUsageText
+        listCharacterPerStep = new List<int>();
+        for (int i = 0; i < listRamUsageText.Count; i++)
+        {
+            listCharacterPerStep.Add(listRamUsageText[i].text.Length);
+        }
 
-        // adapt the RamFullLife text based on the maxRamUsage
         terminalData.RamFullLife.text = new string(ramUsageCharacter, maxRamUsage);
     }
 
@@ -64,19 +64,19 @@ public class GameHandler : MonoBehaviour
             return;
         }
 
+        int ramUsageCounter = 0;
         // loop through the list of ramUsageText
         for (int i = 0; i < listRamUsageText.Count; i++)
         {
-            int ramUsageDisplayInStep = Mathf.Max(
-                (this.currentRamUsage - i * ramUsageCharacterPerStep) % ramUsageCharacterPerStep
-                    + 1,
-                0
+            int ramUsageDisplayInStep = Mathf.Min(
+                Mathf.Max((this.currentRamUsage - ramUsageCounter), 0),
+                listCharacterPerStep[i]
             );
-
-            Debug.Log("for i = " + i + " ramUsageDisplayInStep = " + ramUsageDisplayInStep);
 
             string ramUsageString = new string(ramUsageCharacter, ramUsageDisplayInStep);
             listRamUsageText[i].text = ramUsageString;
+
+            ramUsageCounter += listCharacterPerStep[i];
         }
     }
 

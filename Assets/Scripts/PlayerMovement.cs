@@ -2,26 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 enum PlayerDirection
 {
     Left,
     Right
 }
 
-
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] int MovementStep;
+    [SerializeField]
+    int MovementStep;
+
     // Start is called before the first frame update
 
-    [SerializeField] float durationBetweenSteps;
+    [SerializeField]
+    float durationBetweenSteps;
 
     private PlayerDirection playerDirection;
 
     private float elapsedDuration;
-
-
 
     // Start is called before the first frame update
     void Start()
@@ -53,20 +52,28 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // move left or right
-        PlayerDirection directionInCurrentFrame = horizontalInput < 0 ? PlayerDirection.Left : PlayerDirection.Right;
+        PlayerDirection directionInCurrentFrame =
+            horizontalInput < 0 ? PlayerDirection.Left : PlayerDirection.Right;
 
         if (directionInCurrentFrame != playerDirection)
         {
             // multiply x scale by -1 to flip the sprite
-            transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
+            transform.localScale = new Vector3(
+                transform.localScale.x * -1,
+                transform.localScale.y,
+                transform.localScale.z
+            );
             playerDirection = directionInCurrentFrame;
         }
 
         // move the player on local position
-        transform.localPosition = new Vector2(transform.localPosition.x + (Mathf.Sign(horizontalInput) * MovementStep), transform.localPosition.y);
+        transform.localPosition = new Vector2(
+            transform.localPosition.x + (Mathf.Sign(horizontalInput) * MovementStep),
+            transform.localPosition.y
+        );
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnTriggerEnter2D(Collider2D collision)
     {
         // if the player collides with an object tagged FallingText then destroy the player
         if (collision.gameObject.tag == "FallingElement")
@@ -74,11 +81,8 @@ public class PlayerMovement : MonoBehaviour
             // Destroy the gameobject linked to the collision
             Destroy(collision.gameObject);
 
-            Debug.Log("Call GameHandler to increase the ram usage");
-
             // call the GameHandler to increase the ram usage
             GameHandler.instance.AddReduceRameUsage(1);
-
         }
     }
 }
