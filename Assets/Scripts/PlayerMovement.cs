@@ -120,13 +120,21 @@ public class PlayerMovement : MonoBehaviour
 
         GameObject collidedGameObjectParent = collidedGameObject.transform.parent.gameObject;
 
-        if (collidedGameObjectParent.tag == "FallingElement" && !isDashing)
+        if (collidedGameObjectParent.tag == "File" && !isDashing)
         {
             // Destroy the gameobject linked to the collision
             Destroy(collidedGameObjectParent);
 
             // call the GameHandler to increase the ram usage
             GameHandler.instance.AddReduceRameUsage(1);
+        }
+        else if (collidedGameObjectParent.tag == "Folder" && !isDashing)
+        {
+            // Destroy the gameobject linked to the collision
+            Destroy(collidedGameObjectParent);
+
+            // call the GameHandler to increase the ram usage
+            GameHandler.instance.AddReduceRameUsage(10);
         }
     }
 

@@ -476,7 +476,7 @@ GameObject:
   - component: {fileID: 6646572163229095885}
   m_Layer: 0
   m_Name: FallDownFile
-  m_TagString: FallingElement
+  m_TagString: File
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
