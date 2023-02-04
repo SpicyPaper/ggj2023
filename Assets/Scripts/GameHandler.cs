@@ -25,9 +25,12 @@ public class GameHandler : MonoBehaviour
 
     [SerializeField]
     private GameObject fallDownFileModel;
-    public int CounterClearedStage { get; private set; }
 
-    public int filesCountMult = 5;
+    public int FilesCountMult = 5;
+
+    public float FallDownElementMultiplier = 1.35f;
+
+    public int CounterClearedStage { get; private set; }
 
     private int maxRamUsage;
 
@@ -42,7 +45,8 @@ public class GameHandler : MonoBehaviour
 
     private Level currentLevel = new Level1();
     private Stage currentStage;
-    private int initStageIndex = 5; // Define the stage from which the player starts playing
+    private int initStageIndex = 3; // Define the stage from which the player starts playing
+    private int maxStageIndex = 5;
 
     private float neededDurationSpawnMin = 0.1f;
     private float neededDurationSpawnMax = 0.8f;
@@ -126,6 +130,7 @@ public class GameHandler : MonoBehaviour
 
     private void InGame()
     {
+        UpdateCpuUsageText();
         UpdateRamUsageText();
         ChangeFileRamWeightColor();
         UpdateSpawner();
@@ -218,6 +223,13 @@ public class GameHandler : MonoBehaviour
         fileData.fileName.text = "." + selectedFile.FileType.ToString().ToUpper();
         fileData.File = selectedFile;
         fallDownFiles.Add(fallDownFile);
+    }
+
+    private void UpdateCpuUsageText()
+    {
+        terminalData.CpuUsage.text =
+            (((maxStageIndex - initStageIndex + CounterClearedStage) /
+                ((float)maxStageIndex)) * 100).ToString() + "%";
     }
 
     private void UpdateRamUsageText()

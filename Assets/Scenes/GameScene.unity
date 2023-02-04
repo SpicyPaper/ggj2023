@@ -361,17 +361,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4077382566010775287, guid: 07887e5b15d596e44bdeee6a4ef18db0, type: 3}
   m_PrefabInstance: {fileID: 4077382566397953927}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &810364003 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6082460678622223575, guid: 07887e5b15d596e44bdeee6a4ef18db0, type: 3}
-  m_PrefabInstance: {fileID: 4077382566397953927}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &880639048
 GameObject:
   m_ObjectHideFlags: 0
@@ -946,10 +935,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Terminal
       objectReference: {fileID: 0}
-    - target: {fileID: 4077382566010775284, guid: 07887e5b15d596e44bdeee6a4ef18db0, type: 3}
-      propertyPath: CpuUsage
-      value: 
-      objectReference: {fileID: 810364003}
     - target: {fileID: 4077382566010775287, guid: 07887e5b15d596e44bdeee6a4ef18db0, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

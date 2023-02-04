@@ -9,8 +9,6 @@ public class FallDownElementMovement : MonoBehaviour
 
     private float speed = 180;
 
-    private float fallDownSpeedMultiplier = 1.35f;
-
     void Update()
     {
         // get the current state of the GameHandler
@@ -34,6 +32,8 @@ public class FallDownElementMovement : MonoBehaviour
 
     private float ComputeFallDownSpeed()
     {
-        return speed * ((GameHandler.Instance.CounterClearedStage + 1) * fallDownSpeedMultiplier) * Time.deltaTime;
+        return speed * Time.deltaTime *
+            ((GameHandler.Instance.CounterClearedStage + 1) *
+            GameHandler.Instance.FallDownElementMultiplier);
     }
 }
