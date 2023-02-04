@@ -28,7 +28,19 @@ public class PlayerMovement : MonoBehaviour
 
     private float elapsedDuration;
 
+
     private float previousAbsHorizontalInput;
+
+    public int dashMultiplier = 5;
+    public float dashStretchRatioMax = 0.5f;
+    public float dashStretchStart = 0.25f;
+    public float dashTime = 0.5f;
+
+    public float dashCooldown = 0.5f;
+    private bool canDash = true;
+    private bool isDashing = false;
+    private float currentDashTime = 0f;
+    private Vector2 dashStart, dashEnd;
 
     // Start is called before the first frame update
     void Start()
@@ -42,7 +54,17 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         if (GameHandler.instance.GetGameStatus() != GameStatus.InGame)
+            return;
+
+
+        if (Input.GetKeyDown(KeyCode.Space) && canDash)
         {
+            StartDash();
+            return;
+        }
+        else if (isDashing)
+        {
+            Dash();
             return;
         }
 
@@ -93,6 +115,7 @@ public class PlayerMovement : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
+
         Debug.Log("OK");
         GameObject collidedGameObject = collision.gameObject;
 
@@ -104,7 +127,7 @@ public class PlayerMovement : MonoBehaviour
 
         GameObject collidedGameObjectParent = collidedGameObject.transform.parent.gameObject;
 
-        if (collidedGameObjectParent.tag == "FallingElement")
+        if (collidedGameObjectParent.tag == "FallingElement" && !isDashing)
         {
             // Destroy the gameobject linked to the collision
             Destroy(collidedGameObjectParent);
@@ -112,5 +135,58 @@ public class PlayerMovement : MonoBehaviour
             // call the GameHandler to increase the ram usage
             GameHandler.instance.AddReduceRameUsage(1);
         }
+    }
+
+
+    private void StartDash()
+    {
+        isDashing = true;
+        canDash = false;
+        currentDashTime = 0;
+        dashStart = transform.localPosition;
+        dashEnd = new Vector2(transform.localPosition.x + MovementStep * (playerDirection == PlayerDirection.Left ? -1 : 1) * dashMultiplier, transform.localPosition.y);
+    }
+
+    private void Dash()
+    {
+        
+        // Is currently dashing
+        if (isDashing)
+        {
+            currentDashTime += Time.deltaTime;
+
+            float perc = Mathf.Clamp01(currentDashTime / dashTime);
+            float scalingRatio = SmoothScaling(perc);
+
+            transform.localPosition = Vector2.Lerp(dashStart, dashEnd, perc);
+            transform.localScale = new Vector2(1 / scalingRatio, scalingRatio);
+
+
+            if (currentDashTime >= dashTime)
+            {
+                transform.localPosition = dashEnd;
+                transform.localScale = new Vector2(1, 1);
+                isDashing = false;
+                Invoke("ResetDash", dashCooldown);
+                elapsedDuration = 0;
+            }
+        }
+
+    }
+
+    private void ResetDash()
+    {
+        canDash = true;
+    }
+
+    private float SmoothScaling(float perc)
+    {
+        float modifier = dashStretchRatioMax;
+        if (perc < dashStretchStart)
+            modifier = Mathf.Lerp(1f, dashStretchRatioMax, perc / dashStretchStart);
+        else if (perc > (1f - dashStretchStart))
+            modifier = Mathf.Lerp(dashStretchRatioMax, 1f, perc / (1f - dashStretchStart));
+
+        return modifier;
     }
 }

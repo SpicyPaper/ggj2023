@@ -1239,6 +1239,18 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7871662442468988373, guid: 07887e5b15d596e44bdeee6a4ef18db0, type: 3}
+      propertyPath: dashTime
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7871662442468988373, guid: 07887e5b15d596e44bdeee6a4ef18db0, type: 3}
+      propertyPath: dashMultiplier
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7871662442468988373, guid: 07887e5b15d596e44bdeee6a4ef18db0, type: 3}
+      propertyPath: dashStretchRatioMax
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 7934393993154972225, guid: 07887e5b15d596e44bdeee6a4ef18db0, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
