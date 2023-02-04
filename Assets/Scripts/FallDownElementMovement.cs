@@ -5,50 +5,35 @@ using TMPro;
 
 public class FallDownElementMovement : MonoBehaviour
 {
-    [SerializeField]
-    int fallDownStep;
+    [SerializeField] int FallDownLimit;
 
-    [SerializeField]
-    float durationBetweenSteps;
+    private float speed = 180;
 
-    [SerializeField]
-    int FallDownLimit;
-
-    private float elapsedDuration;
-
-    void Start()
-    {
-        elapsedDuration = 0f;
-    }
+    private float fallDownSpeedMultiplier = 1.35f;
 
     void Update()
     {
         // get the current state of the GameHandler
-        if (GameHandler.instance.GetGameStatus() != GameStatus.InGame)
+        if (GameHandler.Instance.GetGameStatus() != GameStatus.InGame)
         {
             return;
         }
-
-        elapsedDuration += Time.deltaTime;
-
-        if (elapsedDuration < durationBetweenSteps)
-        {
-            return;
-        }
-
-        elapsedDuration -= durationBetweenSteps;
 
         // use local position to prevent issue when rescaling the window
         transform.localPosition = new Vector3(
             transform.localPosition.x,
-            transform.localPosition.y - fallDownStep,
+            transform.localPosition.y - ComputeFallDownSpeed(),
             transform.localPosition.z
         );
-        elapsedDuration = 0;
 
         if (transform.localPosition.y < FallDownLimit)
         {
             Destroy(gameObject);
         }
+    }
+
+    private float ComputeFallDownSpeed()
+    {
+        return speed * ((GameHandler.Instance.CounterClearedStage + 1) * fallDownSpeedMultiplier) * Time.deltaTime;
     }
 }

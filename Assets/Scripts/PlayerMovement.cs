@@ -10,29 +10,15 @@ enum PlayerDirection
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField]
-    int MovementStep;
+    [SerializeField] float minXPosition;
 
-    // Start is called before the first frame update
-
-    [SerializeField]
-    float durationBetweenSteps;
-
-    [SerializeField]
-    float minXPosition;
-
-    [SerializeField]
-    float maxXPosition;
+    [SerializeField] float maxXPosition;
 
     private PlayerDirection playerDirection;
 
-    private float elapsedDuration;
+    public float speed = 300;
 
-    private float previousAbsHorizontalInput;
-
-    private float previousXposition;
-
-    public int dashMultiplier = 5;
+    public int dashDistance = 500;
     public float dashStretchRatioMax = 0.5f;
     public float dashStretchStart = 0.25f;
     public float dashTime = 0.5f;
@@ -48,20 +34,18 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         playerDirection = PlayerDirection.Left;
-        elapsedDuration = durationBetweenSteps;
-        previousXposition = transform.localPosition.x;
     }
 
     // Update is called once per frame
 
     void Update()
     {
-        if (GameHandler.instance.GetGameStatus() != GameStatus.InGame)
+        if (GameHandler.Instance.GetGameStatus() != GameStatus.InGame)
             return;
 
-        float horizontalInput = Input.GetAxis("Horizontal");
+        float horizontalInput = Input.GetAxisRaw("Horizontal");
 
-        if (Mathf.Abs(horizontalInput) > 0.01f)
+        if (Mathf.Abs(horizontalInput) > 0)
         {
             playerDirection = horizontalInput > 0 ? PlayerDirection.Right : PlayerDirection.Left;
         }
@@ -79,27 +63,15 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        elapsedDuration += Time.deltaTime;
-
-        // if horizontal input is 0 then return
-        if (previousAbsHorizontalInput > 0.01f && Mathf.Abs(horizontalInput) < 0.8f)
-        {
-            previousAbsHorizontalInput = Mathf.Abs(horizontalInput);
-            return;
-        }
-
-        previousAbsHorizontalInput = Mathf.Abs(horizontalInput);
-        if (Mathf.Abs(horizontalInput) <= 0.01f || elapsedDuration < durationBetweenSteps)
+        if (Mathf.Abs(horizontalInput) < 0.1f)
         {
             return;
         }
-
-        elapsedDuration = 0;
 
         // move the player on local position
         transform.localPosition = new Vector2(
             Mathf.Clamp(
-                transform.localPosition.x + (Mathf.Sign(horizontalInput) * MovementStep),
+                transform.localPosition.x + (Mathf.Sign(horizontalInput) * speed * Time.deltaTime),
                 minXPosition,
                 maxXPosition
             ),
@@ -125,7 +97,7 @@ public class PlayerMovement : MonoBehaviour
             Destroy(collidedGameObjectParent);
 
             // call the GameHandler to increase the ram usage
-            GameHandler.instance.AddReduceRameUsage(1);
+            GameHandler.Instance.AddReduceRameUsage(1);
         }
         else if (collidedGameObjectParent.tag == "Folder" && !isDashing)
         {
@@ -133,7 +105,7 @@ public class PlayerMovement : MonoBehaviour
             Destroy(collidedGameObjectParent);
 
             // call the GameHandler to increase the ram usage
-            GameHandler.instance.AddReduceRameUsage(10);
+            GameHandler.Instance.AddReduceRameUsage(10);
         }
     }
 
@@ -143,12 +115,12 @@ public class PlayerMovement : MonoBehaviour
         canDash = false;
         currentDashTime = 0;
         dashStart = transform.localPosition;
+
         dashEnd = new Vector2(
             Mathf.Clamp(
                 transform.localPosition.x
-                    + MovementStep
-                        * (playerDirection == PlayerDirection.Left ? -1 : 1)
-                        * dashMultiplier,
+                        + dashDistance
+                        * (playerDirection == PlayerDirection.Left ? -1 : 1),
                 minXPosition,
                 maxXPosition
             ),
@@ -159,27 +131,28 @@ public class PlayerMovement : MonoBehaviour
     private void Dash()
     {
         // Is currently dashing
-        if (isDashing)
+        if (!isDashing)
         {
-            currentDashTime += Time.deltaTime;
+            return;
+        }
 
-            float perc = Mathf.Clamp01(currentDashTime / dashTime);
-            float scalingRatio = SmoothScaling(perc);
+        currentDashTime += Time.deltaTime;
 
-            transform.localPosition = Vector2.Lerp(dashStart, dashEnd, perc);
-            transform.localScale = new Vector2(
-                Mathf.Sign(transform.localScale.x) * (1 / scalingRatio),
-                scalingRatio
-            );
+        float perc = Mathf.Clamp01(currentDashTime / dashTime);
+        float scalingRatio = SmoothScaling(perc);
 
-            if (currentDashTime >= dashTime)
-            {
-                transform.localPosition = dashEnd;
-                transform.localScale = new Vector2(1, 1);
-                isDashing = false;
-                Invoke("ResetDash", dashCooldown);
-                elapsedDuration = 0;
-            }
+        transform.localPosition = Vector2.Lerp(dashStart, dashEnd, perc);
+        transform.localScale = new Vector2(
+            Mathf.Sign(transform.localScale.x) * (1 / scalingRatio),
+            scalingRatio
+        );
+
+        if (currentDashTime >= dashTime)
+        {
+            transform.localPosition = dashEnd;
+            transform.localScale = new Vector2(Mathf.Sign(transform.localScale.x), 1);
+            isDashing = false;
+            Invoke("ResetDash", dashCooldown);
         }
     }
 

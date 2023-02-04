@@ -29,6 +29,9 @@ public class GameHandler : MonoBehaviour
 
     [SerializeField]
     private GameObject fallDownFileModel;
+    public int CounterClearedStage { get; private set; }
+
+    public int filesCountMult = 5;
 
     private int maxRamUsage = 25;
 
@@ -43,25 +46,25 @@ public class GameHandler : MonoBehaviour
 
     private Level currentLevel = new Level1();
     private Stage currentStage;
-    private int initStageIndex = 3; // Define the stage from which the player starts playing
+    private int initStageIndex = 5; // Define the stage from which the player starts playing
 
-    private float neededDurationSpawnMin = 0.4f;
-    private float neededDurationSpawnMax = 2.2f;
+    private float neededDurationSpawnMin = 0.1f;
+    private float neededDurationSpawnMax = 0.8f;
     private float neededDurationSpawnCurrent= 1.2f;
     private float elapsedDurationSpawn;
 
     private List<GameObject> fallDownFiles;
 
     // create a singleton to access this class from other classes
-    public static GameHandler instance;
+    public static GameHandler Instance;
 
     private GameStatus gameStatus = GameStatus.PrepareGame;
 
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
         }
         else
         {
@@ -118,6 +121,8 @@ public class GameHandler : MonoBehaviour
         }
         currentStage.Init();
         terminalData.Path.text = currentStage.GetPath();
+
+        CounterClearedStage = 0;
 
         SetGameStatus(GameStatus.InGame);
     }
@@ -187,6 +192,7 @@ public class GameHandler : MonoBehaviour
         if (currentStage.CheckIfNextStageCanSpawn())
         {
             Debug.Log("You've reached the next stage");
+            CounterClearedStage++;
             currentStage = currentStage.Next;
             if (currentStage == null)
             {
@@ -210,8 +216,10 @@ public class GameHandler : MonoBehaviour
         fallDownFile.transform.parent = spawnerParent.transform;
         fallDownFile.transform.localPosition = selectedSpawner.localPosition;
         fallDownFile.transform.localScale = Vector3.one;
-        fallDownFile.GetComponent<FallDownFileData>().fileName.text =
-            "." + selectedFile.FileType.ToString().ToUpper();
+
+        FallDownFileData fileData = fallDownFile.GetComponent<FallDownFileData>();
+        fileData.fileName.text = "." + selectedFile.FileType.ToString().ToUpper();
+        fileData.File = selectedFile;
         fallDownFiles.Add(fallDownFile);
     }
 
@@ -248,8 +256,6 @@ public class GameHandler : MonoBehaviour
     {
         // get the color of the current ramUsageStep
         Color32 color = listRamUsageText[currentRamUsageStep].color;
-
-        Debug.Log(color);
 
         // loop through all the fallDownElements
         for (int i = fallDownFiles.Count -1; i >= 0; i--)
