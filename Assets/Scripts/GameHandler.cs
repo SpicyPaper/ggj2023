@@ -23,8 +23,9 @@ public class GameHandler : MonoBehaviour
 
     [SerializeField] private GameObject spawner;
 
-    [SerializeField]
-    private GameObject fallDownFileModel;
+    [SerializeField] private GameObject fallDownFileModel;
+
+    [SerializeField] private List<Color> CpuColors;
 
     public int FilesCountMult = 5;
 
@@ -227,9 +228,34 @@ public class GameHandler : MonoBehaviour
 
     private void UpdateCpuUsageText()
     {
-        terminalData.CpuUsage.text =
-            (((maxStageIndex - initStageIndex + CounterClearedStage) /
-                ((float)maxStageIndex)) * 100).ToString() + "%";
+        float percentage = (maxStageIndex - initStageIndex + CounterClearedStage) /
+            ((float)maxStageIndex);
+
+        terminalData.CpuUsage.text = (percentage * 100).ToString() + "%";
+
+        int colorIndex;
+        if (percentage >= 0.8f)
+        {
+            colorIndex = 4;
+        }
+        else if (percentage >= 0.6f)
+        {
+            colorIndex = 3;
+        }
+        else if (percentage >= 0.4f)
+        {
+            colorIndex = 2;
+        }
+        else if (percentage >= 0.2f)
+        {
+            colorIndex = 1;
+        }
+        else
+        {
+            colorIndex = 0;
+        }
+
+        terminalData.CpuUsage.color = CpuColors[colorIndex];
     }
 
     private void UpdateRamUsageText()
