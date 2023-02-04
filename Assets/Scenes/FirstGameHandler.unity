@@ -1367,9 +1367,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4190011899377909570, guid: 6dd72630c41238c489ca108d63a11e90, type: 3}
+      propertyPath: fallDownFileModel
+      value: 
+      objectReference: {fileID: 6998188893838535180, guid: 17520cca06bfc6c4784789831f24d8b1, type: 3}
+    - target: {fileID: 4190011899377909570, guid: 6dd72630c41238c489ca108d63a11e90, type: 3}
       propertyPath: ramUsageGameObject
       value: 
       objectReference: {fileID: 256280910}
+    - target: {fileID: 4190011899377909570, guid: 6dd72630c41238c489ca108d63a11e90, type: 3}
+      propertyPath: fallDownFolderModel
+      value: 
+      objectReference: {fileID: 7926837743762735344, guid: 2b6ac2c282b6b3a48b1d20691ca3fb8e, type: 3}
     - target: {fileID: 4190011899377909570, guid: 6dd72630c41238c489ca108d63a11e90, type: 3}
       propertyPath: fallDownElementModel
       value: 

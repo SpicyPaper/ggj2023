@@ -15,16 +15,24 @@ public enum GameStatus
 public class GameHandler : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField] private int currentRamUsage;
+    [SerializeField]
+    private int currentRamUsage;
 
-    [SerializeField] private TerminalData terminalData;
+    [SerializeField]
+    private TerminalData terminalData;
 
-    [SerializeField] private GameObject spawnerParent;
+    [SerializeField]
+    private GameObject spawnerParent;
 
-    [SerializeField] private GameObject spawner;
+    [SerializeField]
+    private GameObject spawner;
 
     [SerializeField]
     private GameObject fallDownFileModel;
+
+    [SerializeField]
+    private GameObject fallDownFolderModel;
+
     public int CounterClearedStage { get; private set; }
 
     public int filesCountMult = 5;
@@ -46,7 +54,7 @@ public class GameHandler : MonoBehaviour
 
     private float neededDurationSpawnMin = 0.1f;
     private float neededDurationSpawnMax = 0.8f;
-    private float neededDurationSpawnCurrent= 1.2f;
+    private float neededDurationSpawnCurrent = 1.2f;
     private float elapsedDurationSpawn;
 
     private List<GameObject> fallDownFiles;
@@ -255,7 +263,7 @@ public class GameHandler : MonoBehaviour
         Color32 color = listRamUsageText[currentRamUsageStep].color;
 
         // loop through all the fallDownElements
-        for (int i = fallDownFiles.Count -1; i >= 0; i--)
+        for (int i = fallDownFiles.Count - 1; i >= 0; i--)
         {
             if (fallDownFiles[i] == null)
             {
@@ -263,9 +271,7 @@ public class GameHandler : MonoBehaviour
             }
             // try to access the FallDownFileData component of the fallDownElement
             // if it doesn't have the component, continue to the next element
-            FallDownFileData fallDownFileData = fallDownFiles[
-                i
-            ].GetComponent<FallDownFileData>();
+            FallDownFileData fallDownFileData = fallDownFiles[i].GetComponent<FallDownFileData>();
             if (fallDownFileData == null)
             {
                 continue;

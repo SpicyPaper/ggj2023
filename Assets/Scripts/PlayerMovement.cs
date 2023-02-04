@@ -107,11 +107,16 @@ public class PlayerMovement : MonoBehaviour
 
         if (collidedGameObjectParent.tag == "File" && !isDashing)
         {
+            FallDownFileData fallDownFileData =
+                collidedGameObjectParent.GetComponent<FallDownFileData>();
+
+            int ramToAdd = fallDownFileData.File.GetRamWeight();
+
             // Destroy the gameobject linked to the collision
             Destroy(collidedGameObjectParent);
 
             // call the GameHandler to increase the ram usage
-            GameHandler.Instance.AddReduceRameUsage(1);
+            GameHandler.Instance.AddReduceRameUsage(ramToAdd);
         }
         else if (collidedGameObjectParent.tag == "Folder" && !isDashing)
         {
