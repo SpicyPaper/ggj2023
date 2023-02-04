@@ -31,4 +31,16 @@ public class File
 
     public Type FileType;
     public int Count;
+
+    private int currentCount;
+
+    public void IncOrDecCurrentCountByOne(bool increment)
+    {
+        currentCount += increment ? 1 : -1;
+    }
+
+    public bool CheckIfMaxCountIsReached()
+    {
+        return currentCount >= Count;
+    }
 }
