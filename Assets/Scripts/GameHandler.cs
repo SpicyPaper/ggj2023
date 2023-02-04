@@ -28,7 +28,7 @@ public class GameHandler : MonoBehaviour
     private GameObject spawner;
 
     [SerializeField]
-    private GameObject fallDownElementModel;
+    private GameObject fallDownFileModel;
 
     private int maxRamUsage = 25;
 
@@ -50,7 +50,7 @@ public class GameHandler : MonoBehaviour
     private float neededDurationSpawnCurrent= 1.2f;
     private float elapsedDurationSpawn;
 
-    private List<GameObject> fallDownElements;
+    private List<GameObject> fallDownFiles;
 
     // create a singleton to access this class from other classes
     public static GameHandler instance;
@@ -105,7 +105,7 @@ public class GameHandler : MonoBehaviour
             listCharacterPerStep.Add(listRamUsageText[i].text.Length);
         }
 
-        fallDownElements = new List<GameObject>();
+        fallDownFiles = new List<GameObject>();
 
         terminalData.RamFullLife.text = new string(ramUsageCharacter, maxRamUsage);
 
@@ -206,12 +206,13 @@ public class GameHandler : MonoBehaviour
         Transform selectedSpawner = spawner.transform.GetChild(spawnerIndex);
 
         // Spawn element on spawner
-        GameObject fallDownElement = Instantiate(fallDownElementModel);
-        fallDownElement.transform.parent = spawnerParent.transform;
-        fallDownElement.transform.localPosition = selectedSpawner.localPosition;
-        fallDownElement.transform.localScale = Vector3.one;
-        fallDownElement.GetComponentInChildren<TMP_Text>().text = "." + selectedFile.FileType.ToString().ToUpper();
-        fallDownElements.Add(fallDownElement);
+        GameObject fallDownFile = Instantiate(fallDownFileModel);
+        fallDownFile.transform.parent = spawnerParent.transform;
+        fallDownFile.transform.localPosition = selectedSpawner.localPosition;
+        fallDownFile.transform.localScale = Vector3.one;
+        fallDownFile.GetComponent<FallDownFileData>().fileName.text =
+            "." + selectedFile.FileType.ToString().ToUpper();
+        fallDownFiles.Add(fallDownFile);
     }
 
     private void UpdateRamUsageText()
@@ -251,11 +252,15 @@ public class GameHandler : MonoBehaviour
         Debug.Log(color);
 
         // loop through all the fallDownElements
-        for (int i = 0; i < fallDownElements.Count; i++)
+        for (int i = fallDownFiles.Count -1; i >= 0; i--)
         {
+            if (fallDownFiles[i] == null)
+            {
+                continue;
+            }
             // try to access the FallDownFileData component of the fallDownElement
             // if it doesn't have the component, continue to the next element
-            FallDownFileData fallDownFileData = fallDownElements[
+            FallDownFileData fallDownFileData = fallDownFiles[
                 i
             ].GetComponent<FallDownFileData>();
             if (fallDownFileData == null)

@@ -31,6 +31,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2204251437565569145}
+  - {fileID: 7411035438522015128}
   - {fileID: 2373768183346477121}
   - {fileID: 6204075900729104578}
   m_Father: {fileID: 0}
@@ -108,11 +109,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2295016484181504598}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -45}
   m_SizeDelta: {x: 0, y: 20}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &2485212006281605023
@@ -316,10 +317,10 @@ MonoBehaviour:
   durationBetweenSteps: 0.2
   minXPosition: -520
   maxXPosition: 520
-  dashMultiplier: 5
-  dashStretchRatioMax: 0.5
+  dashMultiplier: 8
+  dashStretchRatioMax: 0.3
   dashStretchStart: 0.25
-  dashTime: 0.5
+  dashTime: 0.4
   dashCooldown: 0.5
 --- !u!1001 &234281689817886343
 PrefabInstance:
