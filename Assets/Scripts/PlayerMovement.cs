@@ -15,39 +15,39 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] int MovementStep;
     // Start is called before the first frame update
 
-    [SerializeField] int updateBetweenSteps;
+    [SerializeField] float durationBetweenSteps;
 
     private PlayerDirection playerDirection;
 
-    private int updateBetweenStepsCounter;
+    private float elapsedDuration;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
         playerDirection = PlayerDirection.Left;
-
-        updateBetweenStepsCounter = 0;
+        elapsedDuration = 0f;
     }
 
     // Update is called once per frame
 
-    void FixedUpdate()
+    void Update()
     {
-        if (updateBetweenStepsCounter < updateBetweenSteps)
+        elapsedDuration += Time.deltaTime;
+
+        if (elapsedDuration < durationBetweenSteps)
         {
-            updateBetweenStepsCounter++;
             return;
         }
 
-        updateBetweenStepsCounter = 0;
-
+        elapsedDuration -= durationBetweenSteps;
 
         // get Horizontal input
         float horizontalInput = Input.GetAxis("Horizontal");
 
         // if horizontal input is 0 then return
-        if (horizontalInput == 0)
+        if (Mathf.Abs(horizontalInput) < 0.8f)
         {
             return;
         }
@@ -63,15 +63,15 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // move the player on local position
-        transform.localPosition = new Vector3(transform.localPosition.x + (horizontalInput * MovementStep), transform.localPosition.y, transform.localPosition.z);
+        transform.localPosition = new Vector2(transform.localPosition.x + (Mathf.Sign(horizontalInput) * MovementStep), transform.localPosition.y);
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
         // if the player collides with an object tagged FallingText then destroy the player
-        if (collision.gameObject.tag == "FallingText")
+        if (collision.gameObject.tag == "FallingElement")
         {
-            Debug.Log("Player collided with FallingText");
+            Debug.Log("Player collided with FallingElement");
 
             // Destroy the gameobject linked to the collision
             Destroy(collision.gameObject);
