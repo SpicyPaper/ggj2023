@@ -47,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
 
         // if horizontal input is 0 then return
-        if (Mathf.Abs(horizontalInput) < 0.8f)
+        if (Mathf.Abs(horizontalInput) < 0.6f)
         {
             return;
         }
@@ -71,12 +71,14 @@ public class PlayerMovement : MonoBehaviour
         // if the player collides with an object tagged FallingText then destroy the player
         if (collision.gameObject.tag == "FallingElement")
         {
-            Debug.Log("Player collided with FallingElement");
-
             // Destroy the gameobject linked to the collision
             Destroy(collision.gameObject);
 
-            // TODO handle RAM usage or opening folder
+            Debug.Log("Call GameHandler to increase the ram usage");
+
+            // call the GameHandler to increase the ram usage
+            GameHandler.instance.AddReduceRameUsage(1);
+
         }
     }
 }

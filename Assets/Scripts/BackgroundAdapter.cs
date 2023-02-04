@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class BackgroundAdapter : MonoBehaviour
 {
+    [SerializeField]
+    RectTransform nameGameObjectSizeFitter;
 
-    [SerializeField] RectTransform nameGameObjectSizeFitter;
+    [SerializeField]
+    float sideMargin = 0.3f;
 
     private RectTransform rectTransform;
 
@@ -17,12 +20,10 @@ public class BackgroundAdapter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        Debug.Log("Background size: " + rectTransform.rect.size);
-        Debug.Log("Name size: " + nameGameObjectSizeFitter.rect.size);
-
         // set the size of the background to the width and height of the name rect transform
-        rectTransform.sizeDelta = new Vector2(nameGameObjectSizeFitter.rect.width, nameGameObjectSizeFitter.rect.height);
-
+        rectTransform.sizeDelta = new Vector2(
+            nameGameObjectSizeFitter.rect.width + sideMargin * 2,
+            nameGameObjectSizeFitter.rect.height
+        );
     }
 }

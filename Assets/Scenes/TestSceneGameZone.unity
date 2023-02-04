@@ -388,22 +388,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1927725576}
     m_Modifications:
-    - target: {fileID: 2204251437565569145, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2204251437565569145, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2204251437565569145, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2204251437565569145, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2295016484181504598, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -492,45 +476,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameZone
       objectReference: {fileID: 0}
-    - target: {fileID: 2295016484181504601, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 2295016484910460496, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
-      propertyPath: m_TagString
-      value: FallingText
-      objectReference: {fileID: 0}
     - target: {fileID: 2295016484910460497, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
-      propertyPath: m_AnchoredPosition.y
+      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2295016484910460526, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
-      propertyPath: fallDownStep
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 2295016484910460526, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
-      propertyPath: durationBetweenSteps
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2295016484910460527, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
-      propertyPath: m_Constraints
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 3701089284938263521, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
-      propertyPath: m_BodyType
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4922217664592740592, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
-      propertyPath: MovementStep
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 4922217664592740592, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
-      propertyPath: updateBetweenSteps
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 4922217664592740592, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
-      propertyPath: durationBetweenSteps
-      value: 0.2
+    - target: {fileID: 2295016484910460497, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
