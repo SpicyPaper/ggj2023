@@ -21,33 +21,47 @@ public class GameHandler : MonoBehaviour
     [SerializeField]
     private int currentRamUsage;
 
-    [SerializeField] private TerminalData terminalData;
+    [SerializeField]
+    private TerminalData terminalData;
 
-    [SerializeField] private GameObject audioSourceParent;
+    [SerializeField]
+    private GameObject audioSourceParent;
 
-    [SerializeField] private GameObject audioSourceModel;
+    [SerializeField]
+    private GameObject audioSourceModel;
 
-    [SerializeField] private GameObject spawnerParent;
+    [SerializeField]
+    private GameObject spawnerParent;
 
-    [SerializeField] private GameObject spawner;
+    [SerializeField]
+    private GameObject spawner;
 
-    [SerializeField] private GameObject fallDownFileModel;
+    [SerializeField]
+    private GameObject fallDownFileModel;
 
-    [SerializeField] private GameObject fallDownFolderModel;
+    [SerializeField]
+    private GameObject fallDownFolderModel;
 
-    [SerializeField] private GameObject finalFallDownFolderModel;
+    [SerializeField]
+    private GameObject finalFallDownFolderModel;
 
-    [SerializeField] private GameZoneData gameZoneData;
+    [SerializeField]
+    private GameZoneData gameZoneData;
 
-    [SerializeField] private List<Color> CpuColors;
+    [SerializeField]
+    private List<Color> CpuColors;
 
-    [SerializeField] private int initScenarioStep;
+    [SerializeField]
+    private int initScenarioStep;
 
-    [SerializeField] private float initScenarioDuration;
+    [SerializeField]
+    private float initScenarioDuration;
 
-    [SerializeField] private List<float> scenarioDurationSteps;
+    [SerializeField]
+    private List<float> scenarioDurationSteps;
 
-    [SerializeField] private List<AudioClip> audioClips;
+    [SerializeField]
+    private List<AudioClip> audioClips;
 
     public int CounterClearedStage { get; private set; }
 
@@ -93,9 +107,11 @@ public class GameHandler : MonoBehaviour
     // create a singleton to access this class from other classes
     public static GameHandler Instance;
 
-    private GameStatus gameStatus = GameStatus.InitScenario;
+    private GameStatus gameStatus = GameStatus.PrepareGame;
 
     private bool finalFolderHasSpawned = false;
+
+    private bool hasPrepareGameBeenDone = false;
 
     private void Awake()
     {
@@ -146,7 +162,18 @@ public class GameHandler : MonoBehaviour
                 listRamUsageText[i].text = new string(ramUsageCharacter, listCharacterPerStep[i]);
             }
 
+            hasPrepareGameBeenDone = false;
+
             SetGameStatus(GameStatus.PrepareGame);
+        }
+    }
+
+    void watchKeyPressBeforeGameStart()
+    {
+        // if any key is pressed, start the game
+        if (Input.anyKeyDown)
+        {
+            SetGameStatus(GameStatus.InGame);
         }
     }
 
@@ -161,7 +188,11 @@ public class GameHandler : MonoBehaviour
                 Scenario();
                 break;
             case GameStatus.PrepareGame:
-                PrepareGame();
+                if (!hasPrepareGameBeenDone)
+                {
+                    PrepareGame();
+                }
+                watchKeyPressBeforeGameStart();
                 break;
             case GameStatus.InGame:
                 InGame();
@@ -437,11 +468,15 @@ public class GameHandler : MonoBehaviour
         terminalData.LosePanel.SetActive(false);
         terminalData.WinPanel.SetActive(false);
 
-        SetGameStatus(GameStatus.InGame);
+        terminalData.InstructionPanel.SetActive(true);
+
+        hasPrepareGameBeenDone = true;
     }
 
     private void InGame()
     {
+        terminalData.InstructionPanel.SetActive(false);
+
         UpdateCpuUsageText();
         UpdateRamUsageText();
         ChangeFileRamWeightColor();
