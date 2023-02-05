@@ -218,7 +218,7 @@ public class GameHandler : MonoBehaviour
         GameObject fallDownFile = Instantiate(fallDownFileModel);
         fallDownFile.transform.parent = spawnerParent.transform;
         fallDownFile.transform.localPosition = selectedSpawner.localPosition;
-        fallDownFile.transform.localScale = Vector3.one;
+        fallDownFile.transform.localScale = Vector3.zero;
 
         FallDownFileData fileData = fallDownFile.GetComponent<FallDownFileData>();
         fileData.fileName.text = "." + selectedFile.FileType.ToString().ToUpper();
@@ -232,6 +232,8 @@ public class GameHandler : MonoBehaviour
             ((float)maxStageIndex);
 
         terminalData.CpuUsage.text = (percentage * 100).ToString() + "%";
+
+        terminalData.CpuUsage.transform.localScale = Vector3.one * Mathf.Lerp(0.8f, 1.5f, percentage);
 
         int colorIndex;
         if (percentage >= 0.8f)

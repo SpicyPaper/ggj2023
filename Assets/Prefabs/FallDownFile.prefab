@@ -517,8 +517,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52625ef4b9cd60145972efd987ac764a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fallDownStep: 20
-  durationBetweenSteps: 0.2
   FallDownLimit: -850
 --- !u!114 &6646572163229095885
 MonoBehaviour:
@@ -534,3 +532,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fileName: {fileID: 5946856081794886924}
   fileRamWeight: {fileID: 7320139324959797548}
+  File:
+    FileType: 0
+    Count: 0
