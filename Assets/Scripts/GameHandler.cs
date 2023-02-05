@@ -41,6 +41,8 @@ public class GameHandler : MonoBehaviour
 
     [SerializeField] private List<Color> CpuColors;
 
+    [SerializeField] private List<Color> userColors;
+
     [SerializeField] private int initScenarioStep;
 
     [SerializeField] private float initScenarioDuration;
@@ -191,7 +193,8 @@ public class GameHandler : MonoBehaviour
         terminalData.Game.SetActive(false);
 
         terminalData.Command.text = "";
-        terminalData.UserAndComputer.text = "@" + pcName;
+        terminalData.Computer.text = "@" + pcName;
+        terminalData.User.text = "";
         terminalData.Path.text = "/ggj2023/";
 
         currentElapsedDurationScenario += initScenarioDuration;
@@ -234,7 +237,7 @@ public class GameHandler : MonoBehaviour
             case start + 0:
                 ValidateCurrentScenarioStep();
 
-                StartCoroutine(ChangeTerminal("dev@" + pcName, terminalData.UserAndComputer));
+                StartCoroutine(ChangeTerminal("dev", terminalData.User, userColors[0]));
                 break;
             case start + 1:
                 ValidateCurrentScenarioStep();
@@ -270,7 +273,7 @@ public class GameHandler : MonoBehaviour
             case start + 7:
                 ValidateCurrentScenarioStep();
 
-                StartCoroutine(TypeCommand("git -f p", terminalData.Command, 1, false));
+                StartCoroutine(TypeCommand("git push --fo", terminalData.Command, 1, false));
                 break;
             case start + 8:
                 StopPreviousAudioClip();
@@ -289,7 +292,7 @@ public class GameHandler : MonoBehaviour
             case start + 12:
                 ValidateCurrentScenarioStep();
 
-                StartCoroutine(ChangeTerminal("@" + pcName, terminalData.UserAndComputer));
+                StartCoroutine(ChangeTerminal("", terminalData.User, userColors[0]));
                 break;
             case start + 13:
                 ValidateCurrentScenarioStep();
@@ -297,7 +300,7 @@ public class GameHandler : MonoBehaviour
             case start + 14:
                 ValidateCurrentScenarioStep();
 
-                StartCoroutine(ChangeTerminal("cat@" + pcName, terminalData.UserAndComputer));
+                StartCoroutine(ChangeTerminal("cat", terminalData.User, userColors[1]));
                 break;
             case start + 15:
                 ValidateCurrentScenarioStep();
@@ -336,7 +339,7 @@ public class GameHandler : MonoBehaviour
                     TypeCommand(".................................", terminalData.Command, 1f, true)
                 );
 
-                StartCoroutine(ChangeTerminal("@" + pcName, terminalData.UserAndComputer));
+                StartCoroutine(ChangeTerminal("", terminalData.User, userColors[0]));
                 break;
             case start + 21:
                 ValidateCurrentScenarioStep();
@@ -364,19 +367,19 @@ public class GameHandler : MonoBehaviour
             case start + 28:
                 ValidateCurrentScenarioStep();
 
-                StartCoroutine(ChangeTerminal("dev@" + pcName, terminalData.UserAndComputer));
+                StartCoroutine(ChangeTerminal("dev", terminalData.User, userColors[0]));
                 break;
             case start + 29:
                 ValidateCurrentScenarioStep();
 
-                StartCoroutine(TypeCommand("git -f p", terminalData.Command, 1, false));
+                StartCoroutine(TypeCommand("git push --fo", terminalData.Command, 1, false));
                 break;
             case start + 30:
                 StopPreviousAudioClip();
 
                 ValidateCurrentScenarioStep();
 
-                StartCoroutine(ChangeTerminal("@" + pcName, terminalData.UserAndComputer));
+                StartCoroutine(ChangeTerminal("", terminalData.User, userColors[0]));
                 break;
             case start + 31:
                 ValidateCurrentScenarioStep();
@@ -384,7 +387,7 @@ public class GameHandler : MonoBehaviour
             case start + 32:
                 ValidateCurrentScenarioStep();
 
-                StartCoroutine(ChangeTerminal("hacker@" + pcName, terminalData.UserAndComputer));
+                StartCoroutine(ChangeTerminal("hacker", terminalData.User, userColors[2]));
                 break;
             case start + 33:
                 ValidateCurrentScenarioStep();
@@ -425,12 +428,12 @@ public class GameHandler : MonoBehaviour
             case start + 41:
                 ValidateCurrentScenarioStep();
 
-                StartCoroutine(ChangeTerminal("@" + pcName, terminalData.UserAndComputer));
+                StartCoroutine(ChangeTerminal("", terminalData.User, userColors[0]));
                 break;
             case start + 42:
                 ValidateCurrentScenarioStep();
 
-                StartCoroutine(ChangeTerminal("dev-hacked@" + pcName, terminalData.UserAndComputer));
+                StartCoroutine(ChangeTerminal("dev-hacked", terminalData.User, userColors[3]));
                 break;
             case start + 43:
                 gameStatus = GameStatus.PrepareGame;
@@ -465,10 +468,11 @@ public class GameHandler : MonoBehaviour
         }
     }
 
-    private IEnumerator ChangeTerminal(string text, TMP_Text tmp)
+    private IEnumerator ChangeTerminal(string text, TMP_Text tmp, Color color)
     {
         yield return new WaitForSeconds(0.2f);
         tmp.text = text;
+        tmp.color = color;
     }
 
     private void StopPreviousAudioClip()
