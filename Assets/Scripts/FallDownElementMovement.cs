@@ -20,7 +20,7 @@ public class FallDownElementMovement : MonoBehaviour
     private void Awake()
     {
         elapsedTime = 0;
-        elapsedTimeShaky += neededTimeShaky / 2;
+        elapsedTimeShaky = neededTimeShaky;
     }
 
     void Update()
