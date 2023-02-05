@@ -63,7 +63,7 @@ MonoBehaviour:
   initScenarioDuration: 1
   scenarioDurationSteps:
   - 1
-  - 1
+  - 1.4
   - 0.8
   - 3.5
   - 0.4
@@ -74,6 +74,15 @@ MonoBehaviour:
   - 1.5
   - 1.5
   - 2
+  - 1
+  - 1
+  - 1
+  - 2
+  - 3
+  - 0.4
+  - 0.5
+  - 3.5
+  - 0.5
   audioClips:
   - {fileID: 8300000, guid: d8d8354ff61932f4bbd1381d3625e477, type: 3}
   - {fileID: 8300000, guid: cd9ad5b9cccc40441b77ee3dc4ac0b4e, type: 3}
@@ -87,5 +96,14 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 28f21fe65a3b3a4459d3bc350c5376b4, type: 3}
   - {fileID: 8300000, guid: 53fada72b903fe647aa62caaa011ece5, type: 3}
   - {fileID: 8300000, guid: 7a4e9693e7e0e4048a30f9cf20af13ca, type: 3}
+  - {fileID: 8300000, guid: 9d65cbee3da46264297d7276950a4416, type: 3}
+  - {fileID: 8300000, guid: d6e438bb3e592f94aa0fa9a7795c9499, type: 3}
+  - {fileID: 8300000, guid: d8d8354ff61932f4bbd1381d3625e477, type: 3}
+  - {fileID: 8300000, guid: 4fb260067fac19c4f926d8a96071fcc7, type: 3}
+  - {fileID: 8300000, guid: d6e438bb3e592f94aa0fa9a7795c9499, type: 3}
+  - {fileID: 8300000, guid: 0a97b4e63186008428ebcb9360b95586, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   FilesCountMult: 5
   FallDownElementMultiplier: 1.35

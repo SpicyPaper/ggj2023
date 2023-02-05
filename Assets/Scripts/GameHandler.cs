@@ -154,7 +154,7 @@ public class GameHandler : MonoBehaviour
 
         terminalData.Command.text = "";
         terminalData.UserAndComputer.text = "@" + pcName;
-        terminalData.Path.text = "/project/ggj2023/";
+        terminalData.Path.text = "/ggj2023/";
 
         currentElapsedDurationScenario += initScenarioDuration;
 
@@ -178,7 +178,7 @@ public class GameHandler : MonoBehaviour
                 ValidateCurrentScenarioStep();
                 PlayNextAudioClip();
 
-                StartCoroutine(OpenTerminal("dev@" + pcName, terminalData.UserAndComputer));
+                StartCoroutine(ChangeTerminal("dev@" + pcName, terminalData.UserAndComputer));
                 break;
             case start + 1:
                 ValidateCurrentScenarioStep();
@@ -193,7 +193,8 @@ public class GameHandler : MonoBehaviour
                 PlayNextAudioClip();
 
                 StartCoroutine(
-                    TypeCommand("git -am \"Final commit Global Game Jam 2023\"", terminalData.Command));
+                    TypeCommand("git -am \"Final commit Global Game Jam 2023\"",
+                    terminalData.Command, 1, false));
                 break;
             case start + 4:
                 StopPreviousAudioClip();
@@ -215,7 +216,7 @@ public class GameHandler : MonoBehaviour
                 ValidateCurrentScenarioStep();
                 PlayNextAudioClip();
 
-                StartCoroutine(TypeCommand("git -f p", terminalData.Command));
+                StartCoroutine(TypeCommand("git -f p", terminalData.Command, 1, false));
                 break;
             case start + 8:
                 StopPreviousAudioClip();
@@ -235,19 +236,77 @@ public class GameHandler : MonoBehaviour
                 ValidateCurrentScenarioStep();
                 PlayNextAudioClip();
                 break;
+            case start + 12:
+                ValidateCurrentScenarioStep();
+                PlayNextAudioClip();
+
+                StartCoroutine(ChangeTerminal("@" + pcName, terminalData.UserAndComputer));
+                break;
+            case start + 13:
+                ValidateCurrentScenarioStep();
+                PlayNextAudioClip();
+                break;
+            case start + 14:
+                ValidateCurrentScenarioStep();
+                PlayNextAudioClip();
+
+                StartCoroutine(ChangeTerminal("cat@" + pcName, terminalData.UserAndComputer));
+                break;
+            case start + 15:
+                ValidateCurrentScenarioStep();
+                PlayNextAudioClip();
+
+                StartCoroutine(TypeCommand("wget https://hacker.com/back-to-the-root/game.sh",
+                    terminalData.Command, 2, false));
+                break;
+            case start + 16:
+                StopPreviousAudioClip();
+
+                ValidateCurrentScenarioStep();
+                PlayNextAudioClip();
+                break;
+            case start + 17:
+                ValidateCurrentScenarioStep();
+                PlayNextAudioClip();
+
+                StartCoroutine(TypeEnter(terminalData.Command));
+                break;
+            case start + 18:
+                ValidateCurrentScenarioStep();
+                PlayNextAudioClip();
+
+                StartCoroutine(TypeCommand("*** downloading", terminalData.Command, 3f, false));
+                break;
+            case start + 19:
+                ValidateCurrentScenarioStep();
+                PlayNextAudioClip();
+
+                StartCoroutine(TypeCommand(".................................",
+                    terminalData.Command, 1f, true));
+                break;
+            case start + 20:
+                ValidateCurrentScenarioStep();
+                PlayNextAudioClip();
+
+                StartCoroutine(TypeCommand(" *** (DONE)",
+                    terminalData.Command, 3f, true));
+                break;
             default:
                 break;
         }
     }
 
-    private IEnumerator TypeCommand(string text, TMP_Text tmp)
+    private IEnumerator TypeCommand(string text, TMP_Text tmp, float speed, bool concatenate)
     {
-        tmp.text = "";
+        if (!concatenate)
+        {
+            tmp.text = "";
+        }
 
         for (int i = 0; i < text.Length; i++)
         {
             tmp.text += text.Substring(i, 1);
-            yield return new WaitForSeconds(0.08f);
+            yield return new WaitForSeconds(0.08f / speed);
         }
     }
 
@@ -257,7 +316,7 @@ public class GameHandler : MonoBehaviour
         tmp.text = "";
     }
 
-    private IEnumerator OpenTerminal(string text, TMP_Text tmp)
+    private IEnumerator ChangeTerminal(string text, TMP_Text tmp)
     {
         yield return new WaitForSeconds(0.2f);
         tmp.text = text;
@@ -270,9 +329,15 @@ public class GameHandler : MonoBehaviour
 
     private void PlayNextAudioClip()
     {
-        AudioSource audioSource = GenerateAudioSource();
-        audioSource.clip = audioClips[currentAudioClipScenario];
-        audioSource.Play();
+        AudioClip audioClip = audioClips[currentAudioClipScenario];
+
+        if (audioClip != null)
+        {
+            AudioSource audioSource = GenerateAudioSource();
+            audioSource.clip = audioClip;
+            audioSource.Play();
+        }
+
         currentAudioClipScenario++;
     }
 
