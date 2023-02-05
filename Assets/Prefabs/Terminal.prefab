@@ -425,7 +425,18 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Congratulations! you've\nreached the root \n\npress \"R\" to restart"
+  m_text: 'Congratulations! you''ve
+
+    reached the root
+
+
+    you can now push
+    your
+
+    game :)
+
+
+    press "R" to restart'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: cd608aceccdc7724f82b1e72df73e0e5, type: 2}
   m_sharedMaterial: {fileID: 7814548143940270480, guid: cd608aceccdc7724f82b1e72df73e0e5, type: 2}
@@ -6055,7 +6066,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -49.99987}
+  m_AnchoredPosition: {x: 0, y: -49.999878}
   m_SizeDelta: {x: 1076, y: 980}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &1280787915680992608
@@ -6957,6 +6968,10 @@ PrefabInstance:
       value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 5486020556793709000, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5486020556793709000, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
       propertyPath: InitialModule.startSize.scalar
       value: 0.15
       objectReference: {fileID: 0}
@@ -6968,14 +6983,36 @@ PrefabInstance:
       propertyPath: InitialModule.startLifetime.scalar
       value: 0.4
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6341380138440065953, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
+--- !u!1 &797073968495508154 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2485212006281605023, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
+  m_PrefabInstance: {fileID: 2986724011810084133}
+  m_PrefabAsset: {fileID: 0}
+--- !u!58 &496474614
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 797073968495508154}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 20}
+  serializedVersion: 2
+  m_Radius: 20
 --- !u!114 &3257259062248171778 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 308182621302078503, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
   m_PrefabInstance: {fileID: 2986724011810084133}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 797073968495508154}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
@@ -8252,7 +8289,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4757195049081362023, guid: 81d31d623d95b4040baa20e6949ff88d, type: 3}
       propertyPath: m_text
-      value: Back-to-the-root
+      value: back-to-the-root
       objectReference: {fileID: 0}
     - target: {fileID: 4757195049081362023, guid: 81d31d623d95b4040baa20e6949ff88d, type: 3}
       propertyPath: m_fontSize

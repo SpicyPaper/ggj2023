@@ -17,11 +17,13 @@ public class Level1 : Level
                         Name = "home",
                         Files = new()
                         {
-                            new() { FileType = File.Type.TORRENT, Count = 5 },
+                            new() { FileType = File.Type.TORRENT, Count = 10 },
                             new() { FileType = File.Type.GITIGNORE, Count = 5 },
-                            new() { FileType = File.Type.SH, Count = 5 },
-                            new() { FileType = File.Type.C, Count = 5 },
-                            new() { FileType = File.Type.H, Count = 5 }
+                            new() { FileType = File.Type.XLSX, Count = 5 },
+                            new() { FileType = File.Type.AVI, Count = 5 },
+                            new() { FileType = File.Type.CS, Count = 5 },
+                            new() { FileType = File.Type.C, Count = 2 },
+                            new() { FileType = File.Type.H, Count = 3 }
                         }
                     }
                 },
@@ -121,8 +123,9 @@ public class Level1 : Level
                 new() { FileType = File.Type.ZIP, Count = 2 },
                 new() { FileType = File.Type.DOCX, Count = 2 },
                 new() { FileType = File.Type.SH, Count = 2 },
-                new() { FileType = File.Type.TXT, Count = 5 },
-                new() { FileType = File.Type.PDF, Count = 3 },
+                new() { FileType = File.Type.TXT, Count = 3 },
+                new() { FileType = File.Type.PDF, Count = 2 },
+                new() { FileType = File.Type.TORRENT, Count = 3 },
             };
 
         Stage stage4 =
@@ -151,10 +154,10 @@ public class Level1 : Level
             {
                 new() { FileType = File.Type.C, Count = 3 },
                 new() { FileType = File.Type.H, Count = 3 },
-                new() { FileType = File.Type.TORRENT, Count = 2 },
+                new() { FileType = File.Type.HTML, Count = 2 },
                 new() { FileType = File.Type.GITIGNORE, Count = 2 },
-                new() { FileType = File.Type.AVI, Count = 2 },
-                new() { FileType = File.Type.ZIP, Count = 5 },
+                new() { FileType = File.Type.MP3, Count = 4 },
+                new() { FileType = File.Type.ZIP, Count = 3 },
                 new() { FileType = File.Type.DOCX, Count = 3 },
             };
 
