@@ -35,6 +35,7 @@ public class FallDownFinalFolderMovement : MonoBehaviour
 
         if (transform.localPosition.y < FallDownLimit)
         {
+            GameHandler.Instance.GoToNextStage();
             Destroy(gameObject);
         }
     }

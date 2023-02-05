@@ -37,6 +37,9 @@ public class GameHandler : MonoBehaviour
     private GameObject spawner;
 
     [SerializeField]
+    private GameObject creditsPanel;
+
+    [SerializeField]
     private GameObject fallDownFileModel;
 
     [SerializeField]
@@ -111,7 +114,7 @@ public class GameHandler : MonoBehaviour
     // create a singleton to access this class from other classes
     public static GameHandler Instance;
 
-    private GameStatus gameStatus = GameStatus.InitScenario;
+    private GameStatus gameStatus = GameStatus.PrepareGame;
 
     private bool finalFolderHasSpawned = false;
 
@@ -198,12 +201,14 @@ public class GameHandler : MonoBehaviour
         switch (gameStatus)
         {
             case GameStatus.InitScenario:
+                creditsPanel.SetActive(true);
                 InitScenario();
                 break;
             case GameStatus.Scenario:
                 Scenario();
                 break;
             case GameStatus.PrepareGame:
+                creditsPanel.SetActive(false);
                 if (!hasPrepareGameBeenDone)
                 {
                     PrepareGame();
@@ -773,6 +778,10 @@ public class GameHandler : MonoBehaviour
 
         terminalData.CpuUsage.transform.localScale =
             Vector3.one * Mathf.Lerp(0.8f, 1.5f, percentage);
+
+        float speedMusic = Mathf.Lerp(1, 1.3f, percentage * 0.2f);
+
+        audioSource.pitch = speedMusic;
 
         int colorIndex;
         if (percentage >= 0.8f)
