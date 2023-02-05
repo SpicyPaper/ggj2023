@@ -12,7 +12,7 @@ public class File
         H,
         JS,
         SH,
-        PY,
+        CS, // Replaced py by cs because our font has an issue with capital Y
         PDF,
         PNG,
         TXT,
@@ -46,7 +46,7 @@ public class File
                 return 3;
             case Type.SH:
                 return 4;
-            case Type.PY:
+            case Type.CS:
                 return 5;
             case Type.PDF:
                 return 10;
@@ -93,7 +93,7 @@ public class File
                 return 0.9f;
             case Type.SH:
                 return 0.85f;
-            case Type.PY:
+            case Type.CS:
                 return 0.6f;
             case Type.PDF:
                 return 0.8f;

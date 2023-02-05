@@ -20,6 +20,8 @@ public class PlayerMovement : MonoBehaviour
 
     public float speed = 300;
 
+    public ParticleSystem particleSystem;
+
     public int dashDistance = 500;
     public float dashStretchRatioMax = 0.5f;
     public float dashStretchStart = 0.25f;
@@ -133,12 +135,15 @@ public class PlayerMovement : MonoBehaviour
         canDash = false;
         currentDashTime = 0;
         dashStart = transform.localPosition;
+        particleSystem.Emit(3);
 
         dashEnd = new Vector2(
             transform.localPosition.x
                 + dashDistance * (playerDirection == PlayerDirection.Left ? -1 : 1),
             transform.localPosition.y
         );
+
+
 
         doesDashCollideBorder = false;
         // clear all content of dashGoThroughBorderInOrder
