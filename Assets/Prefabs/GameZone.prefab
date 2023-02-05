@@ -334,6 +334,9 @@ MonoBehaviour:
   dashStretchRatioMax: 0.3
   dashStretchStart: 0.25
   dashTime: 0.2
+  idleStretchMax: 0.75
+  idleStretchStart: 0.5
+  idlestretchDuration: 1
   dashCooldown: 0.1
 --- !u!1 &4706437206661121057
 GameObject:
@@ -352,7 +355,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5764462522955120915
 Transform:
   m_ObjectHideFlags: 0

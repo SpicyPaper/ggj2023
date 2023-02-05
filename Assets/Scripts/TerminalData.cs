@@ -16,6 +16,7 @@ public class TerminalData : MonoBehaviour
     public GameObject PausePanel;
     public GameObject LosePanel;
     public GameObject WinPanel;
+    public GameObject InstructionPanel;
     public TMP_Text Player;
     public GameObject Info;
     public GameObject Game;

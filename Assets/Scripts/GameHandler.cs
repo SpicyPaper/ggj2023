@@ -21,37 +21,51 @@ public class GameHandler : MonoBehaviour
     [SerializeField]
     private int currentRamUsage;
 
-    [SerializeField] private TerminalData terminalData;
+    [SerializeField]
+    private TerminalData terminalData;
 
-    [SerializeField] private GameObject audioSourceParent;
+    [SerializeField]
+    private GameObject audioSourceParent;
 
-    [SerializeField] private GameObject audioSourceModel;
+    [SerializeField]
+    private GameObject audioSourceModel;
 
-    [SerializeField] private GameObject spawnerParent;
+    [SerializeField]
+    private GameObject spawnerParent;
 
-    [SerializeField] private GameObject spawner;
+    [SerializeField]
+    private GameObject spawner;
 
-    [SerializeField] private GameObject fallDownFileModel;
+    [SerializeField]
+    private GameObject fallDownFileModel;
 
-    [SerializeField] private GameObject fallDownFolderModel;
+    [SerializeField]
+    private GameObject fallDownFolderModel;
 
-    [SerializeField] private GameObject finalFallDownFolderModel;
+    [SerializeField]
+    private GameObject finalFallDownFolderModel;
 
-    [SerializeField] private GameZoneData gameZoneData;
+    [SerializeField]
+    private GameZoneData gameZoneData;
 
     [SerializeField] private AudioSource audioSource;
 
     [SerializeField] private List<Color> CpuColors;
 
-    [SerializeField] private List<Color> userColors;
+    [SerializeField]
+    private List<Color> userColors;
 
-    [SerializeField] private int initScenarioStep;
+    [SerializeField]
+    private int initScenarioStep;
 
-    [SerializeField] private float initScenarioDuration;
+    [SerializeField]
+    private float initScenarioDuration;
 
-    [SerializeField] private List<float> scenarioDurationSteps;
+    [SerializeField]
+    private List<float> scenarioDurationSteps;
 
-    [SerializeField] private List<AudioClip> audioClips;
+    [SerializeField]
+    private List<AudioClip> audioClips;
 
     public int CounterClearedStage { get; private set; }
 
@@ -84,11 +98,11 @@ public class GameHandler : MonoBehaviour
 
     private Level currentLevel = new Level1();
     private Stage currentStage;
-    private int initStageIndex = 3; // Define the stage from which the player starts playing
+    private int initStageIndex = 5; // Define the stage from which the player starts playing
     private int maxStageIndex = 5;
 
-    private float neededDurationSpawnMin = 0.1f;
-    private float neededDurationSpawnMax = 0.8f;
+    private float neededDurationSpawnMin = 0.0f;
+    private float neededDurationSpawnMax = 0.5f;
     private float neededDurationSpawnCurrent = 1.2f;
     private float elapsedDurationSpawn;
 
@@ -100,6 +114,8 @@ public class GameHandler : MonoBehaviour
     private GameStatus gameStatus = GameStatus.InitScenario;
 
     private bool finalFolderHasSpawned = false;
+
+    private bool hasPrepareGameBeenDone = false;
 
     private void Awake()
     {
@@ -141,6 +157,18 @@ public class GameHandler : MonoBehaviour
                 finalFolderHasSpawned = false;
             }
 
+            currentStage = currentLevel.CreateStage();
+            for (int i = 1; i < initStageIndex; i++)
+            {
+                currentStage.Reset();
+                currentStage = currentStage.Previous;
+            }
+            currentStage.Init();
+
+            terminalData.Path.text = currentStage.GetPath();
+
+            CounterClearedStage = 0;
+
             currentRamUsage = startRamUsage;
 
             listRamUsageText = terminalData.RamStepsLife;
@@ -150,7 +178,18 @@ public class GameHandler : MonoBehaviour
                 listRamUsageText[i].text = new string(ramUsageCharacter, listCharacterPerStep[i]);
             }
 
+            hasPrepareGameBeenDone = false;
+
             SetGameStatus(GameStatus.PrepareGame);
+        }
+    }
+
+    void watchKeyPressBeforeGameStart()
+    {
+        // if any key is pressed, start the game
+        if (Input.anyKeyDown)
+        {
+            SetGameStatus(GameStatus.InGame);
         }
     }
 
@@ -165,8 +204,12 @@ public class GameHandler : MonoBehaviour
                 Scenario();
                 break;
             case GameStatus.PrepareGame:
-                audioSource.Play();
-                PrepareGame();
+                if (!hasPrepareGameBeenDone)
+                {
+                    PrepareGame();
+                    audioSource.Play();
+                }
+                watchKeyPressBeforeGameStart();
                 break;
             case GameStatus.InGame:
                 audioSource.UnPause();
@@ -400,7 +443,9 @@ public class GameHandler : MonoBehaviour
             case start + 34:
                 ValidateCurrentScenarioStep();
 
-                StartCoroutine(TypeCommand("cd " + currentStage.GetPath(), terminalData.Command, 3, false));
+                StartCoroutine(
+                    TypeCommand("cd " + currentStage.GetPath(), terminalData.Command, 3, false)
+                );
                 break;
             case start + 35:
                 StopPreviousAudioClip();
@@ -489,8 +534,7 @@ public class GameHandler : MonoBehaviour
 
         AudioSource audioSource = audioSourcesScenario[currentScenarioStep - 1 - initScenarioStep];
 
-        if (audioSource != null &&
-            audioSource.isPlaying)
+        if (audioSource != null && audioSource.isPlaying)
         {
             audioSource.Stop();
         }
@@ -554,11 +598,15 @@ public class GameHandler : MonoBehaviour
         terminalData.LosePanel.SetActive(false);
         terminalData.WinPanel.SetActive(false);
 
-        SetGameStatus(GameStatus.InGame);
+        terminalData.InstructionPanel.SetActive(true);
+
+        hasPrepareGameBeenDone = true;
     }
 
     private void InGame()
     {
+        terminalData.InstructionPanel.SetActive(false);
+
         UpdateCpuUsageText();
         UpdateRamUsageText();
         ChangeFileRamWeightColor();
@@ -629,6 +677,8 @@ public class GameHandler : MonoBehaviour
         // Select file
         if (currentStage.CheckIfNextStageCanSpawn())
         {
+            Debug.Log("Can go to next stage");
+
             if (finalFolderHasSpawned)
             {
                 return;
@@ -649,6 +699,8 @@ public class GameHandler : MonoBehaviour
             {
                 return;
             }
+
+            Debug.Log("All fall down files have been destroyed");
 
             // clear the list
             fallDownFiles.Clear();
@@ -671,6 +723,8 @@ public class GameHandler : MonoBehaviour
             fallDownFolderMovement.SetPlayerFollow(gameZoneData.Player);
 
             finalFolderHasSpawned = true;
+
+            Debug.Log("Final folder has spawned");
 
             return;
         }
