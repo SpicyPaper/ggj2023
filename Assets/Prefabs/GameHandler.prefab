@@ -44,3 +44,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cb8b9532e319b448bca40b61563afb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentRamUsage: 0
+  terminalData: {fileID: 0}
+  spawnerParent: {fileID: 0}
+  spawner: {fileID: 0}
+  fallDownFileModel: {fileID: 6998188893838535180, guid: 17520cca06bfc6c4784789831f24d8b1, type: 3}
+  CpuColors:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 0.8980392, b: 0.39215687, a: 1}
+  - {r: 1, g: 0.56078434, b: 0, a: 1}
+  - {r: 1, g: 0.28627452, b: 0, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
+  FilesCountMult: 5
+  FallDownElementMultiplier: 1.35

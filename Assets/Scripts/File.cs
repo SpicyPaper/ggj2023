@@ -135,7 +135,7 @@ public class File
 
     public bool CheckIfMaxCountIsReached()
     {
-        return CurrentCount >= Count * GameHandler.Instance.filesCountMult;
+        return CurrentCount >= Count * GameHandler.Instance.FilesCountMult;
     }
 
     public void Reset()

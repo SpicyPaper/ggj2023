@@ -41,7 +41,12 @@ public class GameHandler : MonoBehaviour
 
     public int CounterClearedStage { get; private set; }
 
-    public int filesCountMult = 5;
+    [SerializeField]
+    private List<Color> CpuColors;
+
+    public int FilesCountMult = 5;
+
+    public float FallDownElementMultiplier = 1.35f;
 
     private int maxRamUsage;
 
@@ -56,7 +61,8 @@ public class GameHandler : MonoBehaviour
 
     private Level currentLevel = new Level1();
     private Stage currentStage;
-    private int initStageIndex = 5; // Define the stage from which the player starts playing
+    private int initStageIndex = 3; // Define the stage from which the player starts playing
+    private int maxStageIndex = 5;
 
     private float neededDurationSpawnMin = 0.1f;
     private float neededDurationSpawnMax = 0.8f;
@@ -142,6 +148,7 @@ public class GameHandler : MonoBehaviour
 
     private void InGame()
     {
+        UpdateCpuUsageText();
         UpdateRamUsageText();
         ChangeFileRamWeightColor();
         UpdateSpawner();
@@ -259,7 +266,7 @@ public class GameHandler : MonoBehaviour
         GameObject fallDownFile = Instantiate(fallDownFileModel);
         fallDownFile.transform.parent = spawnerParent.transform;
         fallDownFile.transform.localPosition = selectedSpawner.localPosition;
-        fallDownFile.transform.localScale = Vector3.one;
+        fallDownFile.transform.localScale = Vector3.zero;
 
         FallDownFileData fileData = fallDownFile.GetComponent<FallDownFileData>();
         fileData.fileName.text = "." + selectedFile.FileType.ToString().ToUpper();
@@ -283,6 +290,41 @@ public class GameHandler : MonoBehaviour
         neededDurationSpawnCurrent = 2;
 
         finalFolderHasSpawned = false;
+    }
+
+    private void UpdateCpuUsageText()
+    {
+        float percentage =
+            (maxStageIndex - initStageIndex + CounterClearedStage) / ((float)maxStageIndex);
+
+        terminalData.CpuUsage.text = (percentage * 100).ToString() + "%";
+
+        terminalData.CpuUsage.transform.localScale =
+            Vector3.one * Mathf.Lerp(0.8f, 1.5f, percentage);
+
+        int colorIndex;
+        if (percentage >= 0.8f)
+        {
+            colorIndex = 4;
+        }
+        else if (percentage >= 0.6f)
+        {
+            colorIndex = 3;
+        }
+        else if (percentage >= 0.4f)
+        {
+            colorIndex = 2;
+        }
+        else if (percentage >= 0.2f)
+        {
+            colorIndex = 1;
+        }
+        else
+        {
+            colorIndex = 0;
+        }
+
+        terminalData.CpuUsage.color = CpuColors[colorIndex];
     }
 
     private void UpdateRamUsageText()

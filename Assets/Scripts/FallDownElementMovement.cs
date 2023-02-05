@@ -9,10 +9,54 @@ public class FallDownElementMovement : MonoBehaviour
 
     private float speed = 180;
 
-    private float fallDownSpeedMultiplier = 1.35f;
+    private float elapsedTime;
+    private float neededTime = 0.6f;
+    private float neededTimePart2 = 0.7f;
+
+    private float elapsedTimeShaky;
+    private float neededTimeShaky = 0.2f;
+    private int shakyDirection = 1;
+
+    private void Awake()
+    {
+        elapsedTime = 0;
+        elapsedTimeShaky = neededTimeShaky;
+    }
 
     void Update()
     {
+        elapsedTime += Time.deltaTime;
+        if (elapsedTime < neededTime)
+        {
+            float perc = elapsedTime / neededTime;
+            transform.localScale = Vector3.one * Mathf.Lerp(0, 1.7f, perc);
+            return;
+        }
+        else if (elapsedTime < neededTimePart2)
+        {
+            float perc = (elapsedTime - neededTime) / (neededTimePart2 - neededTime);
+            transform.localScale = Vector3.one * Mathf.Lerp(1.7f, 1, perc);
+            return;
+        }
+
+        elapsedTimeShaky += Time.deltaTime;
+        if (elapsedTimeShaky >= neededTimeShaky)
+        {
+            elapsedTimeShaky = 0;
+            shakyDirection *= -1;
+        }
+
+        float percShaky = elapsedTimeShaky / neededTimeShaky;
+        transform.Rotate(Vector3.forward * shakyDirection * 0.1f * percShaky);
+        if (shakyDirection < 0)
+        {
+            transform.localScale = Vector3.one * Mathf.Lerp(1, 1.05f, percShaky);
+        }
+        else
+        {
+            transform.localScale = Vector3.one * Mathf.Lerp(1.05f, 1f, percShaky);
+        }
+
         // get the current state of the GameHandler
         if (GameHandler.Instance.GetGameStatus() != GameStatus.InGame)
         {
@@ -34,6 +78,8 @@ public class FallDownElementMovement : MonoBehaviour
 
     private float ComputeFallDownSpeed()
     {
-        return speed * ((GameHandler.Instance.CounterClearedStage + 1) * fallDownSpeedMultiplier) * Time.deltaTime;
+        return speed * Time.deltaTime *
+            ((GameHandler.Instance.CounterClearedStage + 1) *
+            GameHandler.Instance.FallDownElementMultiplier);
     }
 }
