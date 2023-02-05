@@ -23,11 +23,14 @@ public class GameHandler : MonoBehaviour
     [SerializeField]
     private TerminalData terminalData;
 
-    [SerializeField] private GameObject audioSourceParent;
+    [SerializeField]
+    private GameObject audioSourceParent;
 
-    [SerializeField] private GameObject audioSourceModel;
+    [SerializeField]
+    private GameObject audioSourceModel;
 
-    [SerializeField] private GameObject spawnerParent;
+    [SerializeField]
+    private GameObject spawnerParent;
 
     [SerializeField]
     private GameObject spawner;
@@ -49,11 +52,14 @@ public class GameHandler : MonoBehaviour
     [SerializeField]
     private List<Color> CpuColors;
 
-    [SerializeField] private float initScenarioDuration;
+    [SerializeField]
+    private float initScenarioDuration;
 
-    [SerializeField] private List<float> scenarioDurationSteps;
+    [SerializeField]
+    private List<float> scenarioDurationSteps;
 
-    [SerializeField] private List<AudioClip> audioClips;
+    [SerializeField]
+    private List<AudioClip> audioClips;
 
     public int FilesCountMult = 5;
 
@@ -173,9 +179,12 @@ public class GameHandler : MonoBehaviour
                 ResetOnKey();
                 break;
             case GameStatus.Win:
+                WinGame();
+                ResetOnKey();
                 break;
             case GameStatus.Lose:
                 LoseGame();
+                ResetOnKey();
                 break;
             case GameStatus.Pause:
                 PauseGame();
@@ -233,8 +242,13 @@ public class GameHandler : MonoBehaviour
                 PlayNextAudioClip();
 
                 StartCoroutine(
-                    TypeCommand("git -am \"Final commit Global Game Jam 2023\"",
-                    terminalData.Command, 1, false));
+                    TypeCommand(
+                        "git -am \"Final commit Global Game Jam 2023\"",
+                        terminalData.Command,
+                        1,
+                        false
+                    )
+                );
                 break;
             case start + 4:
                 StopPreviousAudioClip();
@@ -296,8 +310,14 @@ public class GameHandler : MonoBehaviour
                 ValidateCurrentScenarioStep();
                 PlayNextAudioClip();
 
-                StartCoroutine(TypeCommand("wget https://hacker.com/back-to-the-root/game.sh",
-                    terminalData.Command, 2, false));
+                StartCoroutine(
+                    TypeCommand(
+                        "wget https://hacker.com/back-to-the-root/game.sh",
+                        terminalData.Command,
+                        2,
+                        false
+                    )
+                );
                 break;
             case start + 16:
                 StopPreviousAudioClip();
@@ -321,15 +341,15 @@ public class GameHandler : MonoBehaviour
                 ValidateCurrentScenarioStep();
                 PlayNextAudioClip();
 
-                StartCoroutine(TypeCommand(".................................",
-                    terminalData.Command, 1f, true));
+                StartCoroutine(
+                    TypeCommand(".................................", terminalData.Command, 1f, true)
+                );
                 break;
             case start + 20:
                 ValidateCurrentScenarioStep();
                 PlayNextAudioClip();
 
-                StartCoroutine(TypeCommand(" *** (DONE)",
-                    terminalData.Command, 3f, true));
+                StartCoroutine(TypeCommand(" *** (DONE)", terminalData.Command, 3f, true));
                 break;
             default:
                 break;
@@ -363,7 +383,7 @@ public class GameHandler : MonoBehaviour
     }
 
     private void StopPreviousAudioClip()
-    { 
+    {
         audioSourcesScenario[currentAudioClipScenario - 1].Stop();
     }
 
@@ -433,6 +453,8 @@ public class GameHandler : MonoBehaviour
         CounterClearedStage = 0;
 
         terminalData.PausePanel.SetActive(false);
+        terminalData.LosePanel.SetActive(false);
+        terminalData.WinPanel.SetActive(false);
 
         SetGameStatus(GameStatus.InGame);
     }
@@ -464,7 +486,12 @@ public class GameHandler : MonoBehaviour
 
     private void LoseGame()
     {
-        Debug.Log("You lose");
+        terminalData.LosePanel.SetActive(true);
+    }
+
+    private void WinGame()
+    {
+        terminalData.WinPanel.SetActive(true);
     }
 
     public void SetGameStatus(GameStatus gameStatus)
@@ -575,12 +602,12 @@ public class GameHandler : MonoBehaviour
         {
             terminalData.Path.text = "/";
             SetGameStatus(GameStatus.Win);
-            Debug.Log("YOU WIN");
         }
-        terminalData.Path.text = currentStage.GetPath();
-
-        // TODO: Remove next line when the animation to change stage is done
-        neededDurationSpawnCurrent = 2;
+        else
+        {
+            terminalData.Path.text = currentStage.GetPath();
+            neededDurationSpawnCurrent = 2;
+        }
 
         finalFolderHasSpawned = false;
     }
