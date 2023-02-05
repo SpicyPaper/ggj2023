@@ -155,53 +155,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4077382566397953928}
     - target: {fileID: 4190011899377909570, guid: 6dd72630c41238c489ca108d63a11e90, type: 3}
-      propertyPath: FilesCountMult
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4190011899377909570, guid: 6dd72630c41238c489ca108d63a11e90, type: 3}
       propertyPath: audioSourceParent
       value: 
       objectReference: {fileID: 1866056187}
-    - target: {fileID: 4190011899377909570, guid: 6dd72630c41238c489ca108d63a11e90, type: 3}
-      propertyPath: userColors.Array.data[0].a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4190011899377909570, guid: 6dd72630c41238c489ca108d63a11e90, type: 3}
-      propertyPath: userColors.Array.data[0].g
-      value: 0.9284806
-      objectReference: {fileID: 0}
-    - target: {fileID: 4190011899377909570, guid: 6dd72630c41238c489ca108d63a11e90, type: 3}
-      propertyPath: userColors.Array.data[0].r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4190011899377909570, guid: 6dd72630c41238c489ca108d63a11e90, type: 3}
-      propertyPath: userColors.Array.data[1].a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4190011899377909570, guid: 6dd72630c41238c489ca108d63a11e90, type: 3}
-      propertyPath: userColors.Array.data[1].b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4190011899377909570, guid: 6dd72630c41238c489ca108d63a11e90, type: 3}
-      propertyPath: userColors.Array.data[1].g
-      value: 0.2584905
-      objectReference: {fileID: 0}
-    - target: {fileID: 4190011899377909570, guid: 6dd72630c41238c489ca108d63a11e90, type: 3}
-      propertyPath: userColors.Array.data[1].r
-      value: 0.5009752
-      objectReference: {fileID: 0}
-    - target: {fileID: 4190011899377909570, guid: 6dd72630c41238c489ca108d63a11e90, type: 3}
-      propertyPath: userColors.Array.data[2].a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4190011899377909570, guid: 6dd72630c41238c489ca108d63a11e90, type: 3}
-      propertyPath: userColors.Array.data[3].a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4190011899377909570, guid: 6dd72630c41238c489ca108d63a11e90, type: 3}
-      propertyPath: userColors.Array.data[3].b
-      value: 0.7727642
-      objectReference: {fileID: 0}
     - target: {fileID: 4203708547006523532, guid: 6dd72630c41238c489ca108d63a11e90, type: 3}
       propertyPath: m_Name
       value: GameHandler

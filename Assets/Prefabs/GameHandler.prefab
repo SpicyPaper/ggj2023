@@ -50,10 +50,12 @@ MonoBehaviour:
   audioSourceModel: {fileID: 7938621409197458399, guid: 63849fd8a4b49b744abedede965507a6, type: 3}
   spawnerParent: {fileID: 0}
   spawner: {fileID: 0}
+  creditsPanel: {fileID: 0}
   fallDownFileModel: {fileID: 6998188893838535180, guid: 17520cca06bfc6c4784789831f24d8b1, type: 3}
   fallDownFolderModel: {fileID: 7926837743762735344, guid: 2b6ac2c282b6b3a48b1d20691ca3fb8e, type: 3}
   finalFallDownFolderModel: {fileID: 7373852823760568756, guid: 3223917635082234892557b5590000a6, type: 3}
   gameZoneData: {fileID: 0}
+  audioSource: {fileID: 0}
   CpuColors:
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 1, g: 0.8980392, b: 0.39215687, a: 1}
@@ -61,10 +63,10 @@ MonoBehaviour:
   - {r: 1, g: 0.28627452, b: 0, a: 1}
   - {r: 1, g: 0, b: 0, a: 1}
   userColors:
-  - {r: 0.2596537, g: 1, b: 0, a: 0}
-  - {r: 0, g: 0.45084667, b: 1, a: 0}
-  - {r: 1, g: 0, b: 0, a: 0}
-  - {r: 1, g: 0, b: 0.5582528, a: 0}
+  - {r: 1, g: 0.9284806, b: 0, a: 1}
+  - {r: 0.5009752, g: 0.2584905, b: 1, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 1, g: 0, b: 0.7727642, a: 1}
   initScenarioStep: 0
   initScenarioDuration: 1
   scenarioDurationSteps:
