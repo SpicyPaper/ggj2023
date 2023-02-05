@@ -360,7 +360,7 @@ public class GameHandler : MonoBehaviour
 
                 StartCoroutine(
                     TypeCommand(
-                        "wget http://hacker.io/back-to-the-root/game.sh /hacker/",
+                        "wget http://hacker.io/back2root.sh /hacker/",
                         terminalData.Command,
                         2,
                         false
@@ -468,7 +468,7 @@ public class GameHandler : MonoBehaviour
             case start + 38:
                 ValidateCurrentScenarioStep();
 
-                StartCoroutine(TypeCommand("sh /hacker/game.sh", terminalData.Command, 3, false));
+                StartCoroutine(TypeCommand("sh /hacker/back2root.sh", terminalData.Command, 3, false));
                 break;
             case start + 39:
                 StopPreviousAudioClip();
