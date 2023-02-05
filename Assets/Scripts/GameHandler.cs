@@ -5,6 +5,8 @@ using TMPro;
 
 public enum GameStatus
 {
+    InitScenario,
+    Scenario,
     PrepareGame,
     InGame,
     Win,
@@ -21,8 +23,11 @@ public class GameHandler : MonoBehaviour
     [SerializeField]
     private TerminalData terminalData;
 
-    [SerializeField]
-    private GameObject spawnerParent;
+    [SerializeField] private GameObject audioSourceParent;
+
+    [SerializeField] private GameObject audioSourceModel;
+
+    [SerializeField] private GameObject spawnerParent;
 
     [SerializeField]
     private GameObject spawner;
@@ -44,11 +49,30 @@ public class GameHandler : MonoBehaviour
     [SerializeField]
     private List<Color> CpuColors;
 
+    [SerializeField] private float initScenarioDuration;
+
+    [SerializeField] private List<float> scenarioDurationSteps;
+
+    [SerializeField] private List<AudioClip> audioClips;
+
     public int FilesCountMult = 5;
 
     public float FallDownElementMultiplier = 1.35f;
 
+    private string pcName = "home-desktop";
+
     private int maxRamUsage;
+
+    private int currentAudioClipScenario;
+    private int currentScenarioStep;
+
+    private bool[] scenarioStepCompleted;
+
+    private float elapsedTimeScenario = 0;
+
+    private float currentElapsedDurationScenario = 0;
+
+    private List<AudioSource> audioSourcesScenario = new List<AudioSource>();
 
     private List<TMP_Text> listRamUsageText;
     private int startRamUsage;
@@ -74,7 +98,7 @@ public class GameHandler : MonoBehaviour
     // create a singleton to access this class from other classes
     public static GameHandler Instance;
 
-    private GameStatus gameStatus = GameStatus.PrepareGame;
+    private GameStatus gameStatus = GameStatus.InitScenario;
 
     private bool finalFolderHasSpawned = false;
 
@@ -89,6 +113,8 @@ public class GameHandler : MonoBehaviour
             Debug.LogError("Another instance of GameHandler already exists!");
             Destroy(gameObject);
         }
+
+        scenarioStepCompleted = new bool[scenarioDurationSteps.Count];
     }
 
     private void ResetOnKey()
@@ -133,6 +159,12 @@ public class GameHandler : MonoBehaviour
     {
         switch (gameStatus)
         {
+            case GameStatus.InitScenario:
+                InitScenario();
+                break;
+            case GameStatus.Scenario:
+                Scenario();
+                break;
             case GameStatus.PrepareGame:
                 PrepareGame();
                 break;
@@ -154,8 +186,159 @@ public class GameHandler : MonoBehaviour
         }
     }
 
+    private void InitScenario()
+    {
+        terminalData.Player.gameObject.SetActive(false);
+        terminalData.Info.SetActive(false);
+        terminalData.Game.SetActive(false);
+
+        terminalData.Command.text = "";
+        terminalData.UserAndComputer.text = "@" + pcName;
+        terminalData.Path.text = "/project/ggj2023/";
+
+        currentElapsedDurationScenario += initScenarioDuration;
+
+        gameStatus = GameStatus.Scenario;
+    }
+
+    private void Scenario()
+    {
+        elapsedTimeScenario += Time.deltaTime;
+
+        if (elapsedTimeScenario < currentElapsedDurationScenario)
+        {
+            return;
+        }
+
+        const int start = 0;
+
+        switch (currentScenarioStep)
+        {
+            case start + 0:
+                ValidateCurrentScenarioStep();
+                PlayNextAudioClip();
+
+                StartCoroutine(OpenTerminal("dev@" + pcName, terminalData.UserAndComputer));
+                break;
+            case start + 1:
+                ValidateCurrentScenarioStep();
+                PlayNextAudioClip();
+                break;
+            case start + 2:
+                ValidateCurrentScenarioStep();
+                PlayNextAudioClip();
+                break;
+            case start + 3:
+                ValidateCurrentScenarioStep();
+                PlayNextAudioClip();
+
+                StartCoroutine(
+                    TypeCommand("git -am \"Final commit Global Game Jam 2023\"", terminalData.Command));
+                break;
+            case start + 4:
+                StopPreviousAudioClip();
+
+                ValidateCurrentScenarioStep();
+                PlayNextAudioClip();
+
+                StartCoroutine(TypeEnter(terminalData.Command));
+                break;
+            case start + 5:
+                ValidateCurrentScenarioStep();
+                PlayNextAudioClip();
+                break;
+            case start + 6:
+                ValidateCurrentScenarioStep();
+                PlayNextAudioClip();
+                break;
+            case start + 7:
+                ValidateCurrentScenarioStep();
+                PlayNextAudioClip();
+
+                StartCoroutine(TypeCommand("git -f p", terminalData.Command));
+                break;
+            case start + 8:
+                StopPreviousAudioClip();
+
+                ValidateCurrentScenarioStep();
+                PlayNextAudioClip();
+                break;
+            case start + 9:
+                ValidateCurrentScenarioStep();
+                PlayNextAudioClip();
+                break;
+            case start + 10:
+                ValidateCurrentScenarioStep();
+                PlayNextAudioClip();
+                break;
+            case start + 11:
+                ValidateCurrentScenarioStep();
+                PlayNextAudioClip();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private IEnumerator TypeCommand(string text, TMP_Text tmp)
+    {
+        tmp.text = "";
+
+        for (int i = 0; i < text.Length; i++)
+        {
+            tmp.text += text.Substring(i, 1);
+            yield return new WaitForSeconds(0.08f);
+        }
+    }
+
+    private IEnumerator TypeEnter(TMP_Text tmp)
+    {
+        yield return new WaitForSeconds(0.2f);
+        tmp.text = "";
+    }
+
+    private IEnumerator OpenTerminal(string text, TMP_Text tmp)
+    {
+        yield return new WaitForSeconds(0.2f);
+        tmp.text = text;
+    }
+
+    private void StopPreviousAudioClip()
+    { 
+        audioSourcesScenario[currentAudioClipScenario - 1].Stop();
+    }
+
+    private void PlayNextAudioClip()
+    {
+        AudioSource audioSource = GenerateAudioSource();
+        audioSource.clip = audioClips[currentAudioClipScenario];
+        audioSource.Play();
+        currentAudioClipScenario++;
+    }
+
+    private void ValidateCurrentScenarioStep()
+    {
+        scenarioStepCompleted[currentScenarioStep] = true;
+        currentElapsedDurationScenario += scenarioDurationSteps[currentScenarioStep];
+        currentScenarioStep++;
+    }
+
+    private AudioSource GenerateAudioSource()
+    {
+        GameObject gameObject = Instantiate(audioSourceModel);
+        gameObject.transform.parent = audioSourceParent.transform;
+        AudioSource audioSource = gameObject.GetComponent<AudioSource>();
+
+        audioSourcesScenario.Add(audioSource);
+        return audioSource;
+    }
+
     private void PrepareGame()
     {
+        terminalData.Player.gameObject.SetActive(true);
+        terminalData.Info.SetActive(true);
+        terminalData.Game.SetActive(true);
+
         startRamUsage = currentRamUsage;
         listRamUsageText = terminalData.RamStepsLife;
         maxRamUsage = terminalData.RamFullLife.text.Length;

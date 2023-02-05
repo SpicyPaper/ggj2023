@@ -46,14 +46,46 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentRamUsage: 0
   terminalData: {fileID: 0}
+  audioSourceParent: {fileID: 0}
+  audioSourceModel: {fileID: 7938621409197458399, guid: 63849fd8a4b49b744abedede965507a6, type: 3}
   spawnerParent: {fileID: 0}
   spawner: {fileID: 0}
   fallDownFileModel: {fileID: 6998188893838535180, guid: 17520cca06bfc6c4784789831f24d8b1, type: 3}
+  fallDownFolderModel: {fileID: 0}
+  finalFallDownFolderModel: {fileID: 0}
+  gameZoneData: {fileID: 0}
   CpuColors:
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 1, g: 0.8980392, b: 0.39215687, a: 1}
   - {r: 1, g: 0.56078434, b: 0, a: 1}
   - {r: 1, g: 0.28627452, b: 0, a: 1}
   - {r: 1, g: 0, b: 0, a: 1}
+  initScenarioDuration: 1
+  scenarioDurationSteps:
+  - 1
+  - 1
+  - 0.8
+  - 3.5
+  - 0.4
+  - 1.7
+  - 1
+  - 0.8
+  - 0.3
+  - 1.5
+  - 1.5
+  - 2
+  audioClips:
+  - {fileID: 8300000, guid: d8d8354ff61932f4bbd1381d3625e477, type: 3}
+  - {fileID: 8300000, guid: cd9ad5b9cccc40441b77ee3dc4ac0b4e, type: 3}
+  - {fileID: 8300000, guid: b2f94d61a70aad745930c2863de984a4, type: 3}
+  - {fileID: 8300000, guid: be302becf849c0b44951354d698af822, type: 3}
+  - {fileID: 8300000, guid: 0a97b4e63186008428ebcb9360b95586, type: 3}
+  - {fileID: 8300000, guid: 8c536ea7c258f334da3071690f2943f2, type: 3}
+  - {fileID: 8300000, guid: 9266fbea721c7574198881fbe6b56189, type: 3}
+  - {fileID: 8300000, guid: be302becf849c0b44951354d698af822, type: 3}
+  - {fileID: 8300000, guid: 87cd0b4de74002e43b0c539baa476b77, type: 3}
+  - {fileID: 8300000, guid: 28f21fe65a3b3a4459d3bc350c5376b4, type: 3}
+  - {fileID: 8300000, guid: 53fada72b903fe647aa62caaa011ece5, type: 3}
+  - {fileID: 8300000, guid: 7a4e9693e7e0e4048a30f9cf20af13ca, type: 3}
   FilesCountMult: 5
   FallDownElementMultiplier: 1.35

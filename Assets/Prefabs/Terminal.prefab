@@ -1279,6 +1279,9 @@ MonoBehaviour:
   Command: {fileID: 3992567216508443579}
   CpuUsage: {fileID: 6082460678622223575}
   PausePanel: {fileID: 5373952322193403768}
+  Player: {fileID: 3257259062248171778}
+  Info: {fileID: 4077382566656666932}
+  Game: {fileID: 4077382565982467194}
 --- !u!1 &4077382566454118790
 GameObject:
   m_ObjectHideFlags: 0
@@ -3691,6 +3694,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
+--- !u!114 &3257259062248171778 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 308182621302078503, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
+  m_PrefabInstance: {fileID: 2986724011810084133}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &3939366540177844083 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2295016484181504598, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}

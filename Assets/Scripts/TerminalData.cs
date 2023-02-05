@@ -14,4 +14,7 @@ public class TerminalData : MonoBehaviour
     public TMP_Text CpuUsage;
 
     public GameObject PausePanel;
+    public TMP_Text Player;
+    public GameObject Info;
+    public GameObject Game;
 }
