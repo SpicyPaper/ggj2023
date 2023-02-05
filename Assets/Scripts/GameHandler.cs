@@ -33,6 +33,12 @@ public class GameHandler : MonoBehaviour
     [SerializeField]
     private GameObject fallDownFolderModel;
 
+    [SerializeField]
+    private GameObject finalFallDownFolderModel;
+
+    [SerializeField]
+    private GameZoneData gameZoneData;
+
     public int CounterClearedStage { get; private set; }
 
     public int filesCountMult = 5;
@@ -63,6 +69,8 @@ public class GameHandler : MonoBehaviour
     public static GameHandler Instance;
 
     private GameStatus gameStatus = GameStatus.PrepareGame;
+
+    private bool finalFolderHasSpawned = false;
 
     private void Awake()
     {
@@ -196,18 +204,49 @@ public class GameHandler : MonoBehaviour
         // Select file
         if (currentStage.CheckIfNextStageCanSpawn())
         {
-            Debug.Log("You've reached the next stage");
-            CounterClearedStage++;
-            currentStage = currentStage.Next;
-            if (currentStage == null)
+            if (finalFolderHasSpawned)
             {
-                terminalData.Path.text = "/";
-                Debug.Log("YOU WIN");
+                return;
             }
-            terminalData.Path.text = currentStage.GetPath();
 
-            // TODO: Remove next line when the animation to change stage is done
-            neededDurationSpawnCurrent = 10;
+            // check if all element of the listFallText are null
+            bool allNull = true;
+            for (int i = 0; i < fallDownFiles.Count; i++)
+            {
+                if (fallDownFiles[i] != null)
+                {
+                    allNull = false;
+                    break;
+                }
+            }
+
+            if (!allNull)
+            {
+                return;
+            }
+
+            // clear the list
+            fallDownFiles.Clear();
+
+            // instantiate the final folder
+            GameObject fallDownFolder = Instantiate(finalFallDownFolderModel);
+
+            Transform firstSpawer = spawner.transform.GetChild(0);
+
+            // set the position of the folder
+            fallDownFolder.transform.parent = spawnerParent.transform;
+            fallDownFolder.transform.localPosition = firstSpawer.localPosition;
+            fallDownFolder.transform.localScale = Vector3.one;
+
+            // from the new fallDownFolder, get the FallDownFolderMovement component
+            // and set the player as target
+            FallDownFinalFolderMovement fallDownFolderMovement =
+                fallDownFolder.GetComponent<FallDownFinalFolderMovement>();
+
+            fallDownFolderMovement.SetPlayerFollow(gameZoneData.Player);
+
+            finalFolderHasSpawned = true;
+
             return;
         }
         File selectedFile = currentStage.CurrentFolder.SelectFile();
@@ -226,6 +265,24 @@ public class GameHandler : MonoBehaviour
         fileData.fileName.text = "." + selectedFile.FileType.ToString().ToUpper();
         fileData.File = selectedFile;
         fallDownFiles.Add(fallDownFile);
+    }
+
+    public void GoToNextStage()
+    {
+        CounterClearedStage++;
+        currentStage = currentStage.Next;
+        if (currentStage == null)
+        {
+            terminalData.Path.text = "/";
+            SetGameStatus(GameStatus.Win);
+            Debug.Log("YOU WIN");
+        }
+        terminalData.Path.text = currentStage.GetPath();
+
+        // TODO: Remove next line when the animation to change stage is done
+        neededDurationSpawnCurrent = 2;
+
+        finalFolderHasSpawned = false;
     }
 
     private void UpdateRamUsageText()

@@ -118,13 +118,12 @@ public class PlayerMovement : MonoBehaviour
             // call the GameHandler to increase the ram usage
             GameHandler.Instance.AddReduceRameUsage(ramToAdd);
         }
-        else if (collidedGameObjectParent.tag == "Folder" && !isDashing)
+        if (collidedGameObjectParent.tag == "FinalFolder")
         {
             // Destroy the gameobject linked to the collision
             Destroy(collidedGameObjectParent);
 
-            // call the GameHandler to increase the ram usage
-            GameHandler.Instance.AddReduceRameUsage(10);
+            GameHandler.Instance.GoToNextStage();
         }
     }
 
