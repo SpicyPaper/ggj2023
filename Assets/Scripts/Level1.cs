@@ -141,8 +141,8 @@ public class Level1 : Level
                     new() { Name = "lol", Files = files4 },
                     new() { Name = "memes", Files = files4 },
                     new() { Name = "homework", Files = files4 },
-                    new() { Name = "privatedontopenplease", Files = files4 },
-                    new() { Name = "waitbecarefulbeforeopenning", Files = files4 },
+                    new() { Name = "dontopen", Files = files4 },
+                    new() { Name = "onlyfans", Files = files4 },
                 },
             };
 
