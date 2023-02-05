@@ -39,12 +39,15 @@ public class FallDownElementMovement : MonoBehaviour
 
         // change the speed based on the file type
         speed *= fileData.File.GetSpeed();
-
-        Debug.Log("File type: " + fileData.File.FileType + " speed: " + speed);
     }
 
     void Update()
     {
+        if (GameHandler.Instance.GetGameStatus() != GameStatus.InGame)
+        {
+            return;
+        }
+
         elapsedTime += Time.deltaTime;
         if (elapsedTime < neededTime)
         {

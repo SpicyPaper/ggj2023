@@ -117,6 +117,44 @@ public class GameHandler : MonoBehaviour
         scenarioStepCompleted = new bool[scenarioDurationSteps.Count];
     }
 
+    private void ResetOnKey()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            // delete every fall down file
+            for (int i = 0; i < fallDownFiles.Count; i++)
+            {
+                Destroy(fallDownFiles[i]);
+            }
+
+            // if the final folder has spawned, destroy it
+            if (finalFolderHasSpawned)
+            {
+                // find all FinalFallDownFolder
+                GameObject[] finalFallDownFolders = GameObject.FindGameObjectsWithTag(
+                    "FinalFolder"
+                );
+                for (int i = 0; i < finalFallDownFolders.Length; i++)
+                {
+                    Destroy(finalFallDownFolders[i]);
+                }
+
+                finalFolderHasSpawned = false;
+            }
+
+            currentRamUsage = startRamUsage;
+
+            listRamUsageText = terminalData.RamStepsLife;
+
+            for (int i = 0; i < listRamUsageText.Count; i++)
+            {
+                listRamUsageText[i].text = new string(ramUsageCharacter, listCharacterPerStep[i]);
+            }
+
+            SetGameStatus(GameStatus.PrepareGame);
+        }
+    }
+
     void Update()
     {
         switch (gameStatus)
@@ -132,6 +170,7 @@ public class GameHandler : MonoBehaviour
                 break;
             case GameStatus.InGame:
                 InGame();
+                ResetOnKey();
                 break;
             case GameStatus.Win:
                 break;
@@ -140,6 +179,7 @@ public class GameHandler : MonoBehaviour
                 break;
             case GameStatus.Pause:
                 PauseGame();
+                ResetOnKey();
                 break;
             default:
                 break;
@@ -367,6 +407,7 @@ public class GameHandler : MonoBehaviour
         startRamUsage = currentRamUsage;
         listRamUsageText = terminalData.RamStepsLife;
         maxRamUsage = terminalData.RamFullLife.text.Length;
+        currentRamUsageStep = 0;
 
         // the list of character per step is based on the text size of each ramUsageText
         listCharacterPerStep = new List<int>();
@@ -391,6 +432,8 @@ public class GameHandler : MonoBehaviour
 
         CounterClearedStage = 0;
 
+        terminalData.PausePanel.SetActive(false);
+
         SetGameStatus(GameStatus.InGame);
     }
 
@@ -410,9 +453,11 @@ public class GameHandler : MonoBehaviour
 
     private void PauseGame()
     {
+        terminalData.PausePanel.SetActive(true);
         // if escape key is pressed, resume the game
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            terminalData.PausePanel.SetActive(false);
             SetGameStatus(GameStatus.InGame);
         }
     }
