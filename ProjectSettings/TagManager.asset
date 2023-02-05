@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Folder
   - File
+  - FinalFolder
   layers:
   - Default
   - TransparentFX

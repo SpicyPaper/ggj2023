@@ -5,7 +5,8 @@ using TMPro;
 
 public class FallDownElementMovement : MonoBehaviour
 {
-    [SerializeField] int FallDownLimit;
+    [SerializeField]
+    int FallDownLimit;
 
     private float speed = 180;
 
@@ -21,6 +22,25 @@ public class FallDownElementMovement : MonoBehaviour
     {
         elapsedTime = 0;
         elapsedTimeShaky = neededTimeShaky;
+    }
+
+    private void Start()
+    {
+        // if the gameobject as the tag "File" then we need to change speed based on the file type
+        bool isFile = gameObject.CompareTag("File");
+
+        if (!isFile)
+        {
+            return;
+        }
+
+        // get the file type by looking at the FallDownFileData component
+        FallDownFileData fileData = GetComponent<FallDownFileData>();
+
+        // change the speed based on the file type
+        speed *= fileData.File.GetSpeed();
+
+        Debug.Log("File type: " + fileData.File.FileType + " speed: " + speed);
     }
 
     void Update()
@@ -78,8 +98,11 @@ public class FallDownElementMovement : MonoBehaviour
 
     private float ComputeFallDownSpeed()
     {
-        return speed * Time.deltaTime *
-            ((GameHandler.Instance.CounterClearedStage + 1) *
-            GameHandler.Instance.FallDownElementMultiplier);
+        return speed
+            * Time.deltaTime
+            * (
+                (GameHandler.Instance.CounterClearedStage + 1)
+                * GameHandler.Instance.FallDownElementMultiplier
+            );
     }
 }

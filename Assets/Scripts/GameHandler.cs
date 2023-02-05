@@ -17,9 +17,11 @@ public enum GameStatus
 public class GameHandler : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField] private int currentRamUsage;
+    [SerializeField]
+    private int currentRamUsage;
 
-    [SerializeField] private TerminalData terminalData;
+    [SerializeField]
+    private TerminalData terminalData;
 
     [SerializeField] private GameObject audioSourceParent;
 
@@ -27,11 +29,25 @@ public class GameHandler : MonoBehaviour
 
     [SerializeField] private GameObject spawnerParent;
 
-    [SerializeField] private GameObject spawner;
+    [SerializeField]
+    private GameObject spawner;
 
-    [SerializeField] private GameObject fallDownFileModel;
+    [SerializeField]
+    private GameObject fallDownFileModel;
 
-    [SerializeField] private List<Color> CpuColors;
+    [SerializeField]
+    private GameObject fallDownFolderModel;
+
+    [SerializeField]
+    private GameObject finalFallDownFolderModel;
+
+    [SerializeField]
+    private GameZoneData gameZoneData;
+
+    public int CounterClearedStage { get; private set; }
+
+    [SerializeField]
+    private List<Color> CpuColors;
 
     [SerializeField] private float initScenarioDuration;
 
@@ -42,8 +58,6 @@ public class GameHandler : MonoBehaviour
     public int FilesCountMult = 5;
 
     public float FallDownElementMultiplier = 1.35f;
-
-    public int CounterClearedStage { get; private set; }
 
     private string pcName = "home-desktop";
 
@@ -76,7 +90,7 @@ public class GameHandler : MonoBehaviour
 
     private float neededDurationSpawnMin = 0.1f;
     private float neededDurationSpawnMax = 0.8f;
-    private float neededDurationSpawnCurrent= 1.2f;
+    private float neededDurationSpawnCurrent = 1.2f;
     private float elapsedDurationSpawn;
 
     private List<GameObject> fallDownFiles;
@@ -85,6 +99,8 @@ public class GameHandler : MonoBehaviour
     public static GameHandler Instance;
 
     private GameStatus gameStatus = GameStatus.InitScenario;
+
+    private bool finalFolderHasSpawned = false;
 
     private void Awake()
     {
@@ -378,18 +394,49 @@ public class GameHandler : MonoBehaviour
         // Select file
         if (currentStage.CheckIfNextStageCanSpawn())
         {
-            Debug.Log("You've reached the next stage");
-            CounterClearedStage++;
-            currentStage = currentStage.Next;
-            if (currentStage == null)
+            if (finalFolderHasSpawned)
             {
-                terminalData.Path.text = "/";
-                Debug.Log("YOU WIN");
+                return;
             }
-            terminalData.Path.text = currentStage.GetPath();
 
-            // TODO: Remove next line when the animation to change stage is done
-            neededDurationSpawnCurrent = 10;
+            // check if all element of the listFallText are null
+            bool allNull = true;
+            for (int i = 0; i < fallDownFiles.Count; i++)
+            {
+                if (fallDownFiles[i] != null)
+                {
+                    allNull = false;
+                    break;
+                }
+            }
+
+            if (!allNull)
+            {
+                return;
+            }
+
+            // clear the list
+            fallDownFiles.Clear();
+
+            // instantiate the final folder
+            GameObject fallDownFolder = Instantiate(finalFallDownFolderModel);
+
+            Transform firstSpawer = spawner.transform.GetChild(0);
+
+            // set the position of the folder
+            fallDownFolder.transform.parent = spawnerParent.transform;
+            fallDownFolder.transform.localPosition = firstSpawer.localPosition;
+            fallDownFolder.transform.localScale = Vector3.one;
+
+            // from the new fallDownFolder, get the FallDownFolderMovement component
+            // and set the player as target
+            FallDownFinalFolderMovement fallDownFolderMovement =
+                fallDownFolder.GetComponent<FallDownFinalFolderMovement>();
+
+            fallDownFolderMovement.SetPlayerFollow(gameZoneData.Player);
+
+            finalFolderHasSpawned = true;
+
             return;
         }
         File selectedFile = currentStage.CurrentFolder.SelectFile();
@@ -410,14 +457,33 @@ public class GameHandler : MonoBehaviour
         fallDownFiles.Add(fallDownFile);
     }
 
+    public void GoToNextStage()
+    {
+        CounterClearedStage++;
+        currentStage = currentStage.Next;
+        if (currentStage == null)
+        {
+            terminalData.Path.text = "/";
+            SetGameStatus(GameStatus.Win);
+            Debug.Log("YOU WIN");
+        }
+        terminalData.Path.text = currentStage.GetPath();
+
+        // TODO: Remove next line when the animation to change stage is done
+        neededDurationSpawnCurrent = 2;
+
+        finalFolderHasSpawned = false;
+    }
+
     private void UpdateCpuUsageText()
     {
-        float percentage = (maxStageIndex - initStageIndex + CounterClearedStage) /
-            ((float)maxStageIndex);
+        float percentage =
+            (maxStageIndex - initStageIndex + CounterClearedStage) / ((float)maxStageIndex);
 
         terminalData.CpuUsage.text = (percentage * 100).ToString() + "%";
 
-        terminalData.CpuUsage.transform.localScale = Vector3.one * Mathf.Lerp(0.8f, 1.5f, percentage);
+        terminalData.CpuUsage.transform.localScale =
+            Vector3.one * Mathf.Lerp(0.8f, 1.5f, percentage);
 
         int colorIndex;
         if (percentage >= 0.8f)
@@ -479,7 +545,7 @@ public class GameHandler : MonoBehaviour
         Color32 color = listRamUsageText[currentRamUsageStep].color;
 
         // loop through all the fallDownElements
-        for (int i = fallDownFiles.Count -1; i >= 0; i--)
+        for (int i = fallDownFiles.Count - 1; i >= 0; i--)
         {
             if (fallDownFiles[i] == null)
             {
@@ -487,9 +553,7 @@ public class GameHandler : MonoBehaviour
             }
             // try to access the FallDownFileData component of the fallDownElement
             // if it doesn't have the component, continue to the next element
-            FallDownFileData fallDownFileData = fallDownFiles[
-                i
-            ].GetComponent<FallDownFileData>();
+            FallDownFileData fallDownFileData = fallDownFiles[i].GetComponent<FallDownFileData>();
             if (fallDownFileData == null)
             {
                 continue;

@@ -10,9 +10,11 @@ enum PlayerDirection
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] float minXPosition;
+    [SerializeField]
+    float minXPosition;
 
-    [SerializeField] float maxXPosition;
+    [SerializeField]
+    float maxXPosition;
 
     private PlayerDirection playerDirection;
 
@@ -29,6 +31,10 @@ public class PlayerMovement : MonoBehaviour
     private float currentDashTime = 0f;
     private Vector2 dashStart,
         dashEnd;
+
+    private List<Vector2> dashGoThroughBorderInOrder = new List<Vector2>();
+
+    private bool doesDashCollideBorder = false;
 
     // Start is called before the first frame update
     void Start()
@@ -70,13 +76,21 @@ public class PlayerMovement : MonoBehaviour
 
         // move the player on local position
         transform.localPosition = new Vector2(
-            Mathf.Clamp(
-                transform.localPosition.x + (Mathf.Sign(horizontalInput) * speed * Time.deltaTime),
-                minXPosition,
-                maxXPosition
-            ),
+            transform.localPosition.x + (Mathf.Sign(horizontalInput) * speed * Time.deltaTime),
             transform.localPosition.y
         );
+
+        // if the player goes out of the screen then it appears on the other side
+        if (transform.localPosition.x < minXPosition)
+        {
+            float delta = minXPosition - transform.localPosition.x;
+            transform.localPosition = new Vector2(maxXPosition - delta, transform.localPosition.y);
+        }
+        else if (transform.localPosition.x > maxXPosition)
+        {
+            float delta = transform.localPosition.x - maxXPosition;
+            transform.localPosition = new Vector2(minXPosition + delta, transform.localPosition.y);
+        }
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -93,19 +107,23 @@ public class PlayerMovement : MonoBehaviour
 
         if (collidedGameObjectParent.tag == "File" && !isDashing)
         {
+            FallDownFileData fallDownFileData =
+                collidedGameObjectParent.GetComponent<FallDownFileData>();
+
+            int ramToAdd = fallDownFileData.File.GetRamWeight();
+
             // Destroy the gameobject linked to the collision
             Destroy(collidedGameObjectParent);
 
             // call the GameHandler to increase the ram usage
-            GameHandler.Instance.AddReduceRameUsage(1);
+            GameHandler.Instance.AddReduceRameUsage(ramToAdd);
         }
-        else if (collidedGameObjectParent.tag == "Folder" && !isDashing)
+        if (collidedGameObjectParent.tag == "FinalFolder")
         {
             // Destroy the gameobject linked to the collision
             Destroy(collidedGameObjectParent);
 
-            // call the GameHandler to increase the ram usage
-            GameHandler.Instance.AddReduceRameUsage(10);
+            GameHandler.Instance.GoToNextStage();
         }
     }
 
@@ -117,15 +135,32 @@ public class PlayerMovement : MonoBehaviour
         dashStart = transform.localPosition;
 
         dashEnd = new Vector2(
-            Mathf.Clamp(
-                transform.localPosition.x
-                        + dashDistance
-                        * (playerDirection == PlayerDirection.Left ? -1 : 1),
-                minXPosition,
-                maxXPosition
-            ),
+            transform.localPosition.x
+                + dashDistance * (playerDirection == PlayerDirection.Left ? -1 : 1),
             transform.localPosition.y
         );
+
+        doesDashCollideBorder = false;
+        // clear all content of dashGoThroughBorderInOrder
+        dashGoThroughBorderInOrder.Clear();
+
+        // if the player goes out of the screen then it appears on the other side
+        if (dashEnd.x < minXPosition)
+        {
+            doesDashCollideBorder = true;
+            dashGoThroughBorderInOrder.Add(new Vector2(minXPosition, dashEnd.y));
+            dashGoThroughBorderInOrder.Add(new Vector2(maxXPosition, dashEnd.y));
+            float delta = minXPosition - dashEnd.x;
+            dashEnd = new Vector2(maxXPosition - delta, dashEnd.y);
+        }
+        else if (dashEnd.x > maxXPosition)
+        {
+            doesDashCollideBorder = true;
+            dashGoThroughBorderInOrder.Add(new Vector2(maxXPosition, dashEnd.y));
+            dashGoThroughBorderInOrder.Add(new Vector2(minXPosition, dashEnd.y));
+            float delta = dashEnd.x - maxXPosition;
+            dashEnd = new Vector2(minXPosition + delta, dashEnd.y);
+        }
     }
 
     private void Dash()
@@ -138,10 +173,58 @@ public class PlayerMovement : MonoBehaviour
 
         currentDashTime += Time.deltaTime;
 
+        if (doesDashCollideBorder)
+        {
+            DashWithBorderCollision();
+        }
+        else
+        {
+            DashWithoutBorderCollision();
+        }
+    }
+
+    private void DashWithoutBorderCollision()
+    {
         float perc = Mathf.Clamp01(currentDashTime / dashTime);
         float scalingRatio = SmoothScaling(perc);
 
         transform.localPosition = Vector2.Lerp(dashStart, dashEnd, perc);
+        transform.localScale = new Vector2(
+            Mathf.Sign(transform.localScale.x) * (1 / scalingRatio),
+            scalingRatio
+        );
+
+        if (currentDashTime >= dashTime)
+        {
+            transform.localPosition = dashEnd;
+            transform.localScale = new Vector2(Mathf.Sign(transform.localScale.x), 1);
+            isDashing = false;
+            Invoke("ResetDash", dashCooldown);
+        }
+    }
+
+    private void DashWithBorderCollision()
+    {
+        float perc = Mathf.Clamp01(currentDashTime / dashTime);
+        float scalingRatio = SmoothScaling(perc);
+
+        if (perc < 0.5f)
+        {
+            transform.localPosition = Vector2.Lerp(
+                dashStart,
+                dashGoThroughBorderInOrder[0],
+                perc * 2
+            );
+        }
+        else
+        {
+            transform.localPosition = Vector2.Lerp(
+                dashGoThroughBorderInOrder[1],
+                dashEnd,
+                (perc - 0.5f) * 2
+            );
+        }
+
         transform.localScale = new Vector2(
             Mathf.Sign(transform.localScale.x) * (1 / scalingRatio),
             scalingRatio
