@@ -27,6 +27,12 @@ public class PlayerMovement : MonoBehaviour
     public float dashStretchStart = 0.25f;
     public float dashTime = 0.5f;
 
+
+    private float currentStretchTime = 0f;
+    public float idleStretchMax = 0.25f;
+    public float idleStretchStart = 0.5f;
+    public float idlestretchDuration = 1f;
+
     public float dashCooldown = 0.5f;
     private bool canDash = true;
     private bool isDashing = false;
@@ -48,6 +54,19 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        // Stretch of the character
+        if (!isDashing)
+        {
+            currentStretchTime += Time.deltaTime;
+            if (currentStretchTime > idlestretchDuration)
+                currentStretchTime -= idlestretchDuration;
+
+            float percStretch = Mathf.Clamp01(currentStretchTime / idlestretchDuration);
+            float scalingRatio = SmoothScalingStretch(percStretch);
+            transform.localScale = new Vector3(transform.localScale.x, scalingRatio, transform.localScale.z);
+        }
+
+
         if (GameHandler.Instance.GetGameStatus() != GameStatus.InGame)
             return;
 
@@ -58,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
             playerDirection = horizontalInput > 0 ? PlayerDirection.Right : PlayerDirection.Left;
         }
 
-        transform.localScale = new Vector3(playerDirection == PlayerDirection.Left ? 1 : -1, 1, 1);
+        transform.localScale = new Vector3(playerDirection == PlayerDirection.Left ? 1 : -1, transform.localScale.y, 1);
 
         if (Input.GetKeyDown(KeyCode.Space) && canDash)
         {
@@ -135,7 +154,7 @@ public class PlayerMovement : MonoBehaviour
         canDash = false;
         currentDashTime = 0;
         dashStart = transform.localPosition;
-        particleSystem.Emit(3);
+        particleSystem.Play();
 
         dashEnd = new Vector2(
             transform.localPosition.x
@@ -256,6 +275,17 @@ public class PlayerMovement : MonoBehaviour
             modifier = Mathf.Lerp(1f, dashStretchRatioMax, perc / dashStretchStart);
         else if (perc > (1f - dashStretchStart))
             modifier = Mathf.Lerp(dashStretchRatioMax, 1f, perc / (1f - dashStretchStart));
+
+        return modifier;
+    }
+
+    private float SmoothScalingStretch(float perc)
+    {
+        float modifier = idleStretchMax;
+        if (perc < idleStretchStart)
+            modifier = Mathf.Lerp(1f, idleStretchMax, perc / idleStretchStart);
+        else if (perc > idleStretchStart)
+            modifier = Mathf.Lerp(idleStretchMax, 1f,  perc);
 
         return modifier;
     }
