@@ -63,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
 
             float percStretch = Mathf.Clamp01(currentStretchTime / idlestretchDuration);
             float scalingRatio = SmoothScalingStretch(percStretch);
-            transform.localScale = new Vector3(transform.localScale.x, scalingRatio, transform.localScale.z);
+            transform.localScale = new Vector3(1/scalingRatio, scalingRatio, transform.localScale.z);
         }
 
 
@@ -77,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
             playerDirection = horizontalInput > 0 ? PlayerDirection.Right : PlayerDirection.Left;
         }
 
-        transform.localScale = new Vector3(playerDirection == PlayerDirection.Left ? 1 : -1, transform.localScale.y, 1);
+        transform.localScale = new Vector3(playerDirection == PlayerDirection.Left ? transform.localScale.x : -transform.localScale.x, transform.localScale.y, 1);
 
         if (Input.GetKeyDown(KeyCode.Space) && canDash)
         {
@@ -132,6 +132,7 @@ public class PlayerMovement : MonoBehaviour
                 collidedGameObjectParent.GetComponent<FallDownFileData>();
 
             int ramToAdd = fallDownFileData.File.GetRamWeight();
+            particleSystem.Play();
 
             // Destroy the gameobject linked to the collision
             Destroy(collidedGameObjectParent);
@@ -154,7 +155,6 @@ public class PlayerMovement : MonoBehaviour
         canDash = false;
         currentDashTime = 0;
         dashStart = transform.localPosition;
-        particleSystem.Play();
 
         dashEnd = new Vector2(
             transform.localPosition.x
@@ -283,7 +283,7 @@ public class PlayerMovement : MonoBehaviour
     {
         float modifier = idleStretchMax;
         if (perc < idleStretchStart)
-            modifier = Mathf.Lerp(1f, idleStretchMax, perc / idleStretchStart);
+            modifier = Mathf.Lerp(1f, idleStretchMax, perc);
         else if (perc > idleStretchStart)
             modifier = Mathf.Lerp(idleStretchMax, 1f,  perc);
 

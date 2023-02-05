@@ -17,6 +17,7 @@ public class FallDownElementMovement : MonoBehaviour
     private float elapsedTimeShaky;
     private float neededTimeShaky = 0.2f;
     private int shakyDirection = 1;
+    public ParticleSystem particle;
 
     private void Awake()
     {
@@ -95,6 +96,10 @@ public class FallDownElementMovement : MonoBehaviour
 
         if (transform.localPosition.y < FallDownLimit)
         {
+            var p = Instantiate(particle);
+            p.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z -10);
+            p.Play();
+            Destroy(p, 0.5f);
             Destroy(gameObject);
         }
     }

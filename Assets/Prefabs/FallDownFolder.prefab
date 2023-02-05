@@ -366,9 +366,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52625ef4b9cd60145972efd987ac764a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fallDownStep: 20
-  durationBetweenSteps: 0.2
   FallDownLimit: -920
+  particle: {fileID: 2331582267610459413, guid: e53606be99531a24cad483a4990522bd, type: 3}
 --- !u!114 &3736460308705259668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -382,3 +381,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   folderName: {fileID: 668005629719298185}
+  Folder:
+    Name: 
+    Files: []
