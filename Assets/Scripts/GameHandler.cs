@@ -97,11 +97,11 @@ public class GameHandler : MonoBehaviour
 
     private Level currentLevel = new Level1();
     private Stage currentStage;
-    private int initStageIndex = 3; // Define the stage from which the player starts playing
+    private int initStageIndex = 5; // Define the stage from which the player starts playing
     private int maxStageIndex = 5;
 
-    private float neededDurationSpawnMin = 0.1f;
-    private float neededDurationSpawnMax = 0.8f;
+    private float neededDurationSpawnMin = 0.0f;
+    private float neededDurationSpawnMax = 0.5f;
     private float neededDurationSpawnCurrent = 1.2f;
     private float elapsedDurationSpawn;
 
@@ -110,7 +110,7 @@ public class GameHandler : MonoBehaviour
     // create a singleton to access this class from other classes
     public static GameHandler Instance;
 
-    private GameStatus gameStatus = GameStatus.PrepareGame;
+    private GameStatus gameStatus = GameStatus.InitScenario;
 
     private bool finalFolderHasSpawned = false;
 
@@ -155,6 +155,18 @@ public class GameHandler : MonoBehaviour
 
                 finalFolderHasSpawned = false;
             }
+
+            currentStage = currentLevel.CreateStage();
+            for (int i = 1; i < initStageIndex; i++)
+            {
+                currentStage.Reset();
+                currentStage = currentStage.Previous;
+            }
+            currentStage.Init();
+
+            terminalData.Path.text = currentStage.GetPath();
+
+            CounterClearedStage = 0;
 
             currentRamUsage = startRamUsage;
 
@@ -661,6 +673,8 @@ public class GameHandler : MonoBehaviour
         // Select file
         if (currentStage.CheckIfNextStageCanSpawn())
         {
+            Debug.Log("Can go to next stage");
+
             if (finalFolderHasSpawned)
             {
                 return;
@@ -681,6 +695,8 @@ public class GameHandler : MonoBehaviour
             {
                 return;
             }
+
+            Debug.Log("All fall down files have been destroyed");
 
             // clear the list
             fallDownFiles.Clear();
@@ -703,6 +719,8 @@ public class GameHandler : MonoBehaviour
             fallDownFolderMovement.SetPlayerFollow(gameZoneData.Player);
 
             finalFolderHasSpawned = true;
+
+            Debug.Log("Final folder has spawned");
 
             return;
         }

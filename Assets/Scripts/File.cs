@@ -90,37 +90,37 @@ public class File
             case Type.H:
                 return 1.0f;
             case Type.JS:
-                return 0.9f;
-            case Type.SH:
-                return 0.85f;
-            case Type.CS:
-                return 0.6f;
-            case Type.PDF:
                 return 0.8f;
-            case Type.PNG:
-                return 0.79957f;
-            case Type.TXT:
-                return 0.75f;
-            case Type.ZIP:
-                return 0.85f;
-            case Type.MP3:
-                return 0.78665f;
-            case Type.CSS:
-                return 0.7f;
-            case Type.AVI:
+            case Type.SH:
+                return 0.65f;
+            case Type.CS:
+                return 0.38f;
+            case Type.PDF:
                 return 0.6f;
+            case Type.PNG:
+                return 0.59957f;
+            case Type.TXT:
+                return 0.55f;
+            case Type.ZIP:
+                return 0.65f;
+            case Type.MP3:
+                return 0.58665f;
+            case Type.CSS:
+                return 0.56f;
+            case Type.AVI:
+                return 0.27f;
             case Type.HTML:
-                return 0.7f;
+                return 0.51f;
             case Type.DOCX:
-                return 0.746f;
+                return 0.546f;
             case Type.PPTX:
-                return 0.8123f;
+                return 0.7123f;
             case Type.XLSX:
-                return 0.86555123f;
+                return 0.76555123f;
             case Type.JPEG:
-                return 0.7722f;
+                return 0.5722f;
             case Type.TORRENT:
-                return 0.5f;
+                return 0.2f;
             case Type.GITIGNORE:
                 return 1;
             default:
