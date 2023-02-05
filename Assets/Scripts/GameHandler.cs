@@ -98,7 +98,7 @@ public class GameHandler : MonoBehaviour
     // create a singleton to access this class from other classes
     public static GameHandler Instance;
 
-    private GameStatus gameStatus = GameStatus.InitScenario;
+    private GameStatus gameStatus = GameStatus.PrepareGame;
 
     private bool finalFolderHasSpawned = false;
 

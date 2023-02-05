@@ -3652,46 +3652,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameZone
       objectReference: {fileID: 0}
-    - target: {fileID: 2295016484910460497, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2295016484910460497, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3469574651464260663, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3469574651464260663, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4922217664592740592, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
-      propertyPath: speed
-      value: 300
-      objectReference: {fileID: 0}
-    - target: {fileID: 4922217664592740592, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
-      propertyPath: dashTime
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4922217664592740592, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
-      propertyPath: dashCooldown
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4922217664592740592, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
-      propertyPath: dashDistance
-      value: 250
-      objectReference: {fileID: 0}
-    - target: {fileID: 6718470150719506337, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6718470150719506337, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fdc92f17fb00e294087dadfff8b16623, type: 3}
 --- !u!114 &3257259062248171778 stripped
