@@ -204,6 +204,17 @@ public class GameHandler : MonoBehaviour
         }
         currentScenarioStep = initScenarioStep;
 
+        // Init stage
+        currentStage = currentLevel.CreateStage();
+        for (int i = 1; i < initStageIndex; i++)
+        {
+            currentStage.Reset();
+            currentStage = currentStage.Previous;
+        }
+        currentStage.Init();
+
+        CounterClearedStage = 0;
+
         gameStatus = GameStatus.Scenario;
     }
 
@@ -293,7 +304,7 @@ public class GameHandler : MonoBehaviour
 
                 StartCoroutine(
                     TypeCommand(
-                        "wget https://hacker.com/back-to-the-root/game.sh",
+                        "wget http://hacker.io/back-to-the-root/game.sh /hacker/",
                         terminalData.Command,
                         2,
                         false
@@ -317,15 +328,112 @@ public class GameHandler : MonoBehaviour
                 break;
             case start + 19:
                 ValidateCurrentScenarioStep();
-
-                StartCoroutine(
-                    TypeCommand(".................................", terminalData.Command, 1f, true)
-                );
                 break;
             case start + 20:
                 ValidateCurrentScenarioStep();
 
+                StartCoroutine(
+                    TypeCommand(".................................", terminalData.Command, 1f, true)
+                );
+
+                StartCoroutine(ChangeTerminal("@" + pcName, terminalData.UserAndComputer));
+                break;
+            case start + 21:
+                ValidateCurrentScenarioStep();
+                break;
+            case start + 22:
+                ValidateCurrentScenarioStep();
+
                 StartCoroutine(TypeCommand(" *** (DONE)", terminalData.Command, 3f, true));
+                break;
+            case start + 23:
+                ValidateCurrentScenarioStep();
+                break;
+            case start + 24:
+                ValidateCurrentScenarioStep();
+                break;
+            case start + 25:
+                ValidateCurrentScenarioStep();
+                break;
+            case start + 26:
+                ValidateCurrentScenarioStep();
+                break;
+            case start + 27:
+                ValidateCurrentScenarioStep();
+                break;
+            case start + 28:
+                ValidateCurrentScenarioStep();
+
+                StartCoroutine(ChangeTerminal("dev@" + pcName, terminalData.UserAndComputer));
+                break;
+            case start + 29:
+                ValidateCurrentScenarioStep();
+
+                StartCoroutine(TypeCommand("git -f p", terminalData.Command, 1, false));
+                break;
+            case start + 30:
+                StopPreviousAudioClip();
+
+                ValidateCurrentScenarioStep();
+
+                StartCoroutine(ChangeTerminal("@" + pcName, terminalData.UserAndComputer));
+                break;
+            case start + 31:
+                ValidateCurrentScenarioStep();
+                break;
+            case start + 32:
+                ValidateCurrentScenarioStep();
+
+                StartCoroutine(ChangeTerminal("hacker@" + pcName, terminalData.UserAndComputer));
+                break;
+            case start + 33:
+                ValidateCurrentScenarioStep();
+                break;
+            case start + 34:
+                ValidateCurrentScenarioStep();
+
+                StartCoroutine(TypeCommand("cd " + currentStage.GetPath(), terminalData.Command, 3, false));
+                break;
+            case start + 35:
+                StopPreviousAudioClip();
+
+                ValidateCurrentScenarioStep();
+                break;
+            case start + 36:
+                ValidateCurrentScenarioStep();
+
+                StartCoroutine(TypeEnter(terminalData.Command, true, currentStage.GetPath()));
+                break;
+            case start + 37:
+                ValidateCurrentScenarioStep();
+                break;
+            case start + 38:
+                ValidateCurrentScenarioStep();
+
+                StartCoroutine(TypeCommand("sh /hacker/game.sh", terminalData.Command, 3, false));
+                break;
+            case start + 39:
+                StopPreviousAudioClip();
+
+                ValidateCurrentScenarioStep();
+                break;
+            case start + 40:
+                ValidateCurrentScenarioStep();
+
+                StartCoroutine(TypeEnter(terminalData.Command));
+                break;
+            case start + 41:
+                ValidateCurrentScenarioStep();
+
+                StartCoroutine(ChangeTerminal("@" + pcName, terminalData.UserAndComputer));
+                break;
+            case start + 42:
+                ValidateCurrentScenarioStep();
+
+                StartCoroutine(ChangeTerminal("dev-hacked@" + pcName, terminalData.UserAndComputer));
+                break;
+            case start + 43:
+                gameStatus = GameStatus.PrepareGame;
                 break;
             default:
                 break;
@@ -346,10 +454,15 @@ public class GameHandler : MonoBehaviour
         }
     }
 
-    private IEnumerator TypeEnter(TMP_Text tmp)
+    private IEnumerator TypeEnter(TMP_Text tmp, bool changePath = false, string path = "")
     {
         yield return new WaitForSeconds(0.2f);
         tmp.text = "";
+
+        if (changePath)
+        {
+            terminalData.Path.text = path;
+        }
     }
 
     private IEnumerator ChangeTerminal(string text, TMP_Text tmp)
@@ -360,8 +473,15 @@ public class GameHandler : MonoBehaviour
 
     private void StopPreviousAudioClip()
     {
+        if (audioSourcesScenario.Count == 0)
+        {
+            return;
+        }
+
         AudioSource audioSource = audioSourcesScenario[currentScenarioStep - 1 - initScenarioStep];
-        if (audioSource.isPlaying)
+
+        if (audioSource != null &&
+            audioSource.isPlaying)
         {
             audioSource.Stop();
         }
@@ -371,10 +491,10 @@ public class GameHandler : MonoBehaviour
     {
         AudioClip audioClip = audioClips[currentScenarioStep];
 
+        AudioSource audioSource = GenerateAudioSource();
+        audioSource.clip = audioClip;
         if (audioClip != null)
         {
-            AudioSource audioSource = GenerateAudioSource();
-            audioSource.clip = audioClip;
             audioSource.Play();
         }
     }
@@ -420,18 +540,6 @@ public class GameHandler : MonoBehaviour
         fallDownFiles = new List<GameObject>();
 
         terminalData.RamFullLife.text = new string(ramUsageCharacter, maxRamUsage);
-
-        // Init stage
-        currentStage = currentLevel.CreateStage();
-        for (int i = 1; i < initStageIndex; i++)
-        {
-            currentStage.Reset();
-            currentStage = currentStage.Previous;
-        }
-        currentStage.Init();
-        terminalData.Path.text = currentStage.GetPath();
-
-        CounterClearedStage = 0;
 
         terminalData.PausePanel.SetActive(false);
         terminalData.LosePanel.SetActive(false);
@@ -596,7 +704,7 @@ public class GameHandler : MonoBehaviour
     private void UpdateCpuUsageText()
     {
         float percentage =
-            (maxStageIndex - initStageIndex + CounterClearedStage) / ((float)maxStageIndex);
+            (maxStageIndex - initStageIndex + CounterClearedStage + 1) / ((float)maxStageIndex);
 
         terminalData.CpuUsage.text = (percentage * 100).ToString() + "%";
 
