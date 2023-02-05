@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Linq;
 
 public enum GameStatus
 {
@@ -20,46 +21,35 @@ public class GameHandler : MonoBehaviour
     [SerializeField]
     private int currentRamUsage;
 
-    [SerializeField]
-    private TerminalData terminalData;
+    [SerializeField] private TerminalData terminalData;
 
-    [SerializeField]
-    private GameObject audioSourceParent;
+    [SerializeField] private GameObject audioSourceParent;
 
-    [SerializeField]
-    private GameObject audioSourceModel;
+    [SerializeField] private GameObject audioSourceModel;
 
-    [SerializeField]
-    private GameObject spawnerParent;
+    [SerializeField] private GameObject spawnerParent;
 
-    [SerializeField]
-    private GameObject spawner;
+    [SerializeField] private GameObject spawner;
 
-    [SerializeField]
-    private GameObject fallDownFileModel;
+    [SerializeField] private GameObject fallDownFileModel;
 
-    [SerializeField]
-    private GameObject fallDownFolderModel;
+    [SerializeField] private GameObject fallDownFolderModel;
 
-    [SerializeField]
-    private GameObject finalFallDownFolderModel;
+    [SerializeField] private GameObject finalFallDownFolderModel;
 
-    [SerializeField]
-    private GameZoneData gameZoneData;
+    [SerializeField] private GameZoneData gameZoneData;
+
+    [SerializeField] private List<Color> CpuColors;
+
+    [SerializeField] private int initScenarioStep;
+
+    [SerializeField] private float initScenarioDuration;
+
+    [SerializeField] private List<float> scenarioDurationSteps;
+
+    [SerializeField] private List<AudioClip> audioClips;
 
     public int CounterClearedStage { get; private set; }
-
-    [SerializeField]
-    private List<Color> CpuColors;
-
-    [SerializeField]
-    private float initScenarioDuration;
-
-    [SerializeField]
-    private List<float> scenarioDurationSteps;
-
-    [SerializeField]
-    private List<AudioClip> audioClips;
 
     public int FilesCountMult = 5;
 
@@ -69,7 +59,6 @@ public class GameHandler : MonoBehaviour
 
     private int maxRamUsage;
 
-    private int currentAudioClipScenario;
     private int currentScenarioStep;
 
     private bool[] scenarioStepCompleted;
@@ -104,7 +93,7 @@ public class GameHandler : MonoBehaviour
     // create a singleton to access this class from other classes
     public static GameHandler Instance;
 
-    private GameStatus gameStatus = GameStatus.PrepareGame;
+    private GameStatus gameStatus = GameStatus.InitScenario;
 
     private bool finalFolderHasSpawned = false;
 
@@ -207,6 +196,14 @@ public class GameHandler : MonoBehaviour
 
         currentElapsedDurationScenario += initScenarioDuration;
 
+        for (int i = 0; i < initScenarioStep; i++)
+        {
+            elapsedTimeScenario += scenarioDurationSteps[i];
+            currentElapsedDurationScenario += scenarioDurationSteps[i];
+            scenarioStepCompleted[i] = true;
+        }
+        currentScenarioStep = initScenarioStep;
+
         gameStatus = GameStatus.Scenario;
     }
 
@@ -225,21 +222,17 @@ public class GameHandler : MonoBehaviour
         {
             case start + 0:
                 ValidateCurrentScenarioStep();
-                PlayNextAudioClip();
 
                 StartCoroutine(ChangeTerminal("dev@" + pcName, terminalData.UserAndComputer));
                 break;
             case start + 1:
                 ValidateCurrentScenarioStep();
-                PlayNextAudioClip();
                 break;
             case start + 2:
                 ValidateCurrentScenarioStep();
-                PlayNextAudioClip();
                 break;
             case start + 3:
                 ValidateCurrentScenarioStep();
-                PlayNextAudioClip();
 
                 StartCoroutine(
                     TypeCommand(
@@ -254,21 +247,17 @@ public class GameHandler : MonoBehaviour
                 StopPreviousAudioClip();
 
                 ValidateCurrentScenarioStep();
-                PlayNextAudioClip();
 
                 StartCoroutine(TypeEnter(terminalData.Command));
                 break;
             case start + 5:
                 ValidateCurrentScenarioStep();
-                PlayNextAudioClip();
                 break;
             case start + 6:
                 ValidateCurrentScenarioStep();
-                PlayNextAudioClip();
                 break;
             case start + 7:
                 ValidateCurrentScenarioStep();
-                PlayNextAudioClip();
 
                 StartCoroutine(TypeCommand("git -f p", terminalData.Command, 1, false));
                 break;
@@ -276,39 +265,31 @@ public class GameHandler : MonoBehaviour
                 StopPreviousAudioClip();
 
                 ValidateCurrentScenarioStep();
-                PlayNextAudioClip();
                 break;
             case start + 9:
                 ValidateCurrentScenarioStep();
-                PlayNextAudioClip();
                 break;
             case start + 10:
                 ValidateCurrentScenarioStep();
-                PlayNextAudioClip();
                 break;
             case start + 11:
                 ValidateCurrentScenarioStep();
-                PlayNextAudioClip();
                 break;
             case start + 12:
                 ValidateCurrentScenarioStep();
-                PlayNextAudioClip();
 
                 StartCoroutine(ChangeTerminal("@" + pcName, terminalData.UserAndComputer));
                 break;
             case start + 13:
                 ValidateCurrentScenarioStep();
-                PlayNextAudioClip();
                 break;
             case start + 14:
                 ValidateCurrentScenarioStep();
-                PlayNextAudioClip();
 
                 StartCoroutine(ChangeTerminal("cat@" + pcName, terminalData.UserAndComputer));
                 break;
             case start + 15:
                 ValidateCurrentScenarioStep();
-                PlayNextAudioClip();
 
                 StartCoroutine(
                     TypeCommand(
@@ -323,23 +304,19 @@ public class GameHandler : MonoBehaviour
                 StopPreviousAudioClip();
 
                 ValidateCurrentScenarioStep();
-                PlayNextAudioClip();
                 break;
             case start + 17:
                 ValidateCurrentScenarioStep();
-                PlayNextAudioClip();
 
                 StartCoroutine(TypeEnter(terminalData.Command));
                 break;
             case start + 18:
                 ValidateCurrentScenarioStep();
-                PlayNextAudioClip();
 
                 StartCoroutine(TypeCommand("*** downloading", terminalData.Command, 3f, false));
                 break;
             case start + 19:
                 ValidateCurrentScenarioStep();
-                PlayNextAudioClip();
 
                 StartCoroutine(
                     TypeCommand(".................................", terminalData.Command, 1f, true)
@@ -347,7 +324,6 @@ public class GameHandler : MonoBehaviour
                 break;
             case start + 20:
                 ValidateCurrentScenarioStep();
-                PlayNextAudioClip();
 
                 StartCoroutine(TypeCommand(" *** (DONE)", terminalData.Command, 3f, true));
                 break;
@@ -384,12 +360,16 @@ public class GameHandler : MonoBehaviour
 
     private void StopPreviousAudioClip()
     {
-        audioSourcesScenario[currentAudioClipScenario - 1].Stop();
+        AudioSource audioSource = audioSourcesScenario[currentScenarioStep - 1 - initScenarioStep];
+        if (audioSource.isPlaying)
+        {
+            audioSource.Stop();
+        }
     }
 
     private void PlayNextAudioClip()
     {
-        AudioClip audioClip = audioClips[currentAudioClipScenario];
+        AudioClip audioClip = audioClips[currentScenarioStep];
 
         if (audioClip != null)
         {
@@ -397,14 +377,15 @@ public class GameHandler : MonoBehaviour
             audioSource.clip = audioClip;
             audioSource.Play();
         }
-
-        currentAudioClipScenario++;
     }
 
     private void ValidateCurrentScenarioStep()
     {
         scenarioStepCompleted[currentScenarioStep] = true;
         currentElapsedDurationScenario += scenarioDurationSteps[currentScenarioStep];
+
+        PlayNextAudioClip();
+
         currentScenarioStep++;
     }
 
