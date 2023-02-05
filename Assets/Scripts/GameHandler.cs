@@ -39,6 +39,8 @@ public class GameHandler : MonoBehaviour
 
     [SerializeField] private GameZoneData gameZoneData;
 
+    [SerializeField] private AudioSource audioSource;
+
     [SerializeField] private List<Color> CpuColors;
 
     [SerializeField] private List<Color> userColors;
@@ -163,9 +165,11 @@ public class GameHandler : MonoBehaviour
                 Scenario();
                 break;
             case GameStatus.PrepareGame:
+                audioSource.Play();
                 PrepareGame();
                 break;
             case GameStatus.InGame:
+                audioSource.UnPause();
                 InGame();
                 ResetOnKey();
                 break;
@@ -178,6 +182,7 @@ public class GameHandler : MonoBehaviour
                 ResetOnKey();
                 break;
             case GameStatus.Pause:
+                audioSource.Pause();
                 PauseGame();
                 ResetOnKey();
                 break;
