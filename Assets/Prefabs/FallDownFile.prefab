@@ -532,6 +532,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FallDownLimit: -850
+  particle: {fileID: 2331582267610459413, guid: e53606be99531a24cad483a4990522bd, type: 3}
 --- !u!114 &6646572163229095885
 MonoBehaviour:
   m_ObjectHideFlags: 0
